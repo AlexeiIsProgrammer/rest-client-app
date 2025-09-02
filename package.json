@@ -8,6 +8,7 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "format:fix": "prettier --write .",
+    "deploy:vercel": "vercel --prod",
     "prepare": "husky",
     "lint": "eslint . --fix",
     "test": "vitest",
