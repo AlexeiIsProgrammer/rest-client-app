@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Route } from './+types/home';
 
 // eslint-disable-next-line no-empty-pattern
