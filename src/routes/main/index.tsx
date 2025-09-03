@@ -2,8 +2,8 @@ import { Container } from '@mui/material';
 
 export function meta() {
   return [
-    { title: 'New React Router App' },
-    { name: 'description', content: 'Welcome to React Router!' },
+    { title: 'Main page' },
+    { name: 'description', content: 'Welcome to Main page!' },
   ];
 }
 
