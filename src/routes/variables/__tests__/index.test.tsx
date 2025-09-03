@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest';
-import Home from '../home';
 import { render, screen } from '@testing-library/react';
+import Variables from '..';
 
-test('Home renders', async () => {
-  const TITLE = 'Hello';
+test('Variables renders', async () => {
+  const TITLE = 'Variables';
 
-  render(<Home />);
+  render(<Variables />);
 
   expect(screen.getByText(TITLE)).toBeInTheDocument();
 });
