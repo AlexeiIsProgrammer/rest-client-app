@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { TextField, Button, Container, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import Spinner from '../../components/Spinner/Spinner';
+import AuthForm from '../../components/AuthForm/AuthForm';
 import { registerWithEmailAndPassword } from '../../firebase';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import { useNavigate } from 'react-router';
@@ -44,43 +45,15 @@ export default function SignUp() {
         <Typography variant="h4" gutterBottom>
           Sign Up
         </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            sx={{
-              backgroundColor: 'white',
-              borderRadius: 1,
-            }}
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            type="password"
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            sx={{
-              backgroundColor: 'white',
-              borderRadius: 1,
-            }}
-          />
-          {error && <Typography color="error">{error}</Typography>}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            Register
-          </Button>
-        </form>
+        <AuthForm
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          handleSubmit={handleSubmit}
+          error={error}
+          buttonText="Register"
+        />
       </Container>
     </>
   );

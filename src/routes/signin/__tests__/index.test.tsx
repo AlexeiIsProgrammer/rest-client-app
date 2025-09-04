@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Auth from '..';
+import SignIn from '..';
 
-test('Auth renders', async () => {
-  const TITLE = 'Auth';
+test('SignIn renders', async () => {
+  const TITLE = 'Sign In';
 
-  render(<Auth />);
+  render(<SignIn />);
 
   expect(screen.getByText(TITLE)).toBeInTheDocument();
 });
