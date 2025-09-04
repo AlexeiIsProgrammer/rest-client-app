@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router';
 import { Container } from '@mui/material';
 
 export function meta() {
@@ -8,5 +9,10 @@ export function meta() {
 }
 
 export default function Auth() {
-  return <Container maxWidth="sm">Auth</Container>;
+  return (
+    <>
+      <Container maxWidth="sm">Auth</Container>
+      <Outlet />
+    </>
+  );
 }
