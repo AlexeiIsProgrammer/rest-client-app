@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { TextField, Button, Container, Typography } from '@mui/material';
+import Spinner from '../../components/Spinner/Spinner';
 import { registerWithEmailAndPassword } from '../../firebase';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import { useNavigate } from 'react-router';
 
 export default function SignUp() {
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -21,6 +23,7 @@ export default function SignUp() {
       );
     }
     try {
+      setIsLoading(true);
       await registerWithEmailAndPassword(email, password);
       navigate('/rest');
     } catch (err) {
@@ -29,51 +32,56 @@ export default function SignUp() {
       } else {
         setError('An unexpected error occurred');
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" gutterBottom>
-        Sign Up
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          sx={{
-            backgroundColor: 'white',
-            borderRadius: 1,
-          }}
-        />
-        <TextField
-          fullWidth
-          margin="normal"
-          type="password"
-          label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          sx={{
-            backgroundColor: 'white',
-            borderRadius: 1,
-          }}
-        />
-        {error && <Typography color="error">{error}</Typography>}
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-        >
-          Register
-        </Button>
-      </form>
-    </Container>
+    <>
+      {isLoading && <Spinner />}
+      <Container maxWidth="sm">
+        <Typography variant="h4" gutterBottom>
+          Sign Up
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: 1,
+            }}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            type="password"
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: 1,
+            }}
+          />
+          {error && <Typography color="error">{error}</Typography>}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            Register
+          </Button>
+        </form>
+      </Container>
+    </>
   );
 }
