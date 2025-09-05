@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Container, Typography } from '@mui/material';
 import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
-import { logInWithEmailAndPassword } from '../../firebase';
+import { logInWithEmailAndPassword, auth } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { validateEmail } from '../../utils/validation';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link, Navigate } from 'react-router';
 
 export default function SignIn() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [user, loading] = useAuthState(auth);
+  const [isFetching, setIsFetching] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -20,9 +22,9 @@ export default function SignIn() {
     }
 
     try {
-      setIsLoading(true);
+      setIsFetching(true);
       await logInWithEmailAndPassword(email, password);
-      navigate('/rest');
+      navigate('/');
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -30,13 +32,21 @@ export default function SignIn() {
         setError('An unexpected error occurred');
       }
     } finally {
-      setIsLoading(false);
+      setIsFetching(false);
     }
+  }
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (user) {
+    return <Navigate to="/" replace />;
   }
 
   return (
     <>
-      {isLoading && <Spinner />}
+      {isFetching && <Spinner />}
       <Container maxWidth="sm">
         <Typography variant="h4" gutterBottom>
           Sign In
