@@ -1,7 +1,11 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import SignIn from '..';
 import { MemoryRouter } from 'react-router';
+
+vi.mock('react-firebase-hooks/auth', () => ({
+  useAuthState: () => [null, false],
+}));
 
 test('SignIn renders', async () => {
   const TITLE = 'Sign In';

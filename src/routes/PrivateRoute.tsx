@@ -11,7 +11,7 @@ export default function PrivateRoute() {
   }
 
   if (!user) {
-    return <Navigate to="/signin" />;
+    return <Navigate to="/signin" replace />;
   }
 
   return <Outlet />;
