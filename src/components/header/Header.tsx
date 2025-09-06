@@ -1,47 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Link } from 'react-router';
 import { logout } from '../../firebase';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { AppBar, Toolbar, Button, Box, ButtonBase, useScrollTrigger } from '@mui/material';
+import { Login, Logout, PersonAdd } from '@mui/icons-material';
+import RSSLogo from '../../assets/images/rss-logo.svg'
 
 function Header(): React.ReactElement {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const isScrolled = useScrollTrigger({ disableHysteresis: true, threshold: 10 });
 
   return (
-    <AppBar 
-      position="sticky" 
-      sx={{ 
+    <AppBar
+      position="sticky"
+      elevation={isScrolled ? 2 : 0}
+      sx={{
         backgroundColor: isScrolled ? '#F5F5F5' : '#E0E2E6',
         boxShadow: isScrolled ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
         transition: 'all 0.3s ease-in-out',
       }}
     >
-      <Toolbar 
-        sx={{ 
-          display: 'flex', 
+      <Toolbar
+        sx={{
+          display: 'flex',
           justifyContent: 'space-between',
           minHeight: isScrolled ? '56px' : '64px',
           transition: 'min-height 0.3s ease-in-out',
         }}
       >
-        <Typography variant="h6" component="div">
-          Logo
-        </Typography>
+        <ButtonBase
+            component={Link}
+            to="/"
+            aria-label="Go to home"
+            sx={{ p: 0.5, borderRadius: 1 }}
+          >
+            <Box component="img" src={RSSLogo} alt="Your brand" sx={{ height: 32, display: "block" }} />
+        </ButtonBase>
 
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
           <Button variant="outlined" size="medium">
@@ -50,18 +42,18 @@ function Header(): React.ReactElement {
         </Box>
 
         <Box sx={{ '& button': { m: 1 } }}>
-          <Button startIcon={<LoginIcon />} variant="outlined" size="medium">
+          <Button startIcon={<Login />} variant="outlined" size="medium">
             Sign In
           </Button>
           <Button
-            startIcon={<PersonAddIcon />}
+            startIcon={<PersonAdd />}
             variant="outlined"
             size="medium"
           >
             Sign Up
           </Button>
           <Button
-            startIcon={<LogoutIcon />}
+            startIcon={<Logout />}
             variant="outlined"
             size="medium"
             onClick={() => logout()}
