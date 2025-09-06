@@ -1,20 +1,28 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from "react-router-dom";
 import Header from '../Header';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+vi.mock("@mui/material/useScrollTrigger", () => ({ default: () => false }));
+
+const renderWithRouter = (ui: React.ReactElement) =>
+  render(<MemoryRouter initialEntries={["/"]}>{ui}</MemoryRouter>);
 
 describe('Header', () => {
-  it('renders the header', () => {
-    render(<Header />);
-    expect(screen.getByText('Logo')).toBeInTheDocument();
+
+it("renders the header logo link", () => {
+    renderWithRouter(<Header />);
+    expect(screen.getByRole("link", { name: /go to home/i })).toBeInTheDocument();
+    expect(screen.getByAltText(/logo/i)).toBeInTheDocument();
   });
 
-  it('renders the login button', () => {
-    render(<Header />);
-    expect(screen.getByText('Sign In')).toBeInTheDocument();
+  it("renders the login button", () => {
+    renderWithRouter(<Header />);
+    expect(screen.getByRole("button", { name: /sign in/i })).toBeInTheDocument();
   });
 
-  it('renders the sign up button', () => {
-    render(<Header />);
-    expect(screen.getByText('Sign Up')).toBeInTheDocument();
+  it("renders the sign up button", () => {
+    renderWithRouter(<Header />);
+    expect(screen.getByRole("button", { name: /sign up/i })).toBeInTheDocument();
   });
 });

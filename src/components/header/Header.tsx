@@ -1,12 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link as RouterLink } from "react-router-dom";
 import { logout } from '../../firebase';
-import { AppBar, Toolbar, Button, Box, ButtonBase, useScrollTrigger } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Box,
+  ButtonBase,
+  useScrollTrigger,
+} from '@mui/material';
 import { Login, Logout, PersonAdd } from '@mui/icons-material';
-import RSSLogo from '../../assets/images/rss-logo.svg'
+import RSSLogo from '../../assets/images/rss-logo.svg';
 
 function Header(): React.ReactElement {
-  const isScrolled = useScrollTrigger({ disableHysteresis: true, threshold: 10 });
+  const isScrolled = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 10,
+  });
 
   return (
     <AppBar
@@ -27,12 +37,17 @@ function Header(): React.ReactElement {
         }}
       >
         <ButtonBase
-            component={Link}
-            to="/"
-            aria-label="Go to home"
-            sx={{ p: 0.5, borderRadius: 1 }}
-          >
-            <Box component="img" src={RSSLogo} alt="Your brand" sx={{ height: 32, display: "block" }} />
+          component={RouterLink}
+          to="/"
+          aria-label="Go to home"
+          sx={{ p: 0.5, borderRadius: 1 }}
+        >
+          <Box
+            component="img"
+            src={RSSLogo}
+            alt="Logo"
+            sx={{ height: 32, display: 'block' }}
+          />
         </ButtonBase>
 
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
@@ -45,11 +60,7 @@ function Header(): React.ReactElement {
           <Button startIcon={<Login />} variant="outlined" size="medium">
             Sign In
           </Button>
-          <Button
-            startIcon={<PersonAdd />}
-            variant="outlined"
-            size="medium"
-          >
+          <Button startIcon={<PersonAdd />} variant="outlined" size="medium">
             Sign Up
           </Button>
           <Button
