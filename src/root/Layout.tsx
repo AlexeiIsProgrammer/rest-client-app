@@ -1,9 +1,4 @@
-import {
-  Links,
-  Meta,
-  Scripts,
-  ScrollRestoration,
-} from 'react-router';
+import { Links, Meta, Scripts, ScrollRestoration } from 'react-router';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
