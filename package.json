@@ -17,16 +17,20 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
     "@react-router/node": "^7.7.1",
     "@react-router/serve": "^7.7.1",
+    "@textea/json-viewer": "^4.0.1",
     "@vercel/react-router": "^1.2.3",
     "firebase": "^12.2.1",
     "isbot": "^5.1.27",
+    "postman-code-generators": "^2.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-firebase-hooks": "^5.1.1",
-    "react-router": "^7.7.1"
+    "react-router": "^7.7.1",
+    "react-syntax-highlighter": "^15.6.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
@@ -37,6 +41,7 @@
     "@types/node": "^20",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
@@ -46,6 +51,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "husky": "^9.1.7",
+    "jiti": "^2.5.1",
     "jsdom": "^26.1.0",
     "prettier": "3.6.2",
     "typescript": "^5.8.3",
