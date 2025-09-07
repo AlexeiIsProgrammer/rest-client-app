@@ -1,12 +1,24 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Header from '../Header';
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('@mui/material/useScrollTrigger', () => ({ default: () => false }));
+vi.mock('react-firebase-hooks/auth', () => ({
+  useAuthState: () => [null, false, null]
+}));
+
+const theme = createTheme();
 
 const renderWithRouter = (ui: React.ReactElement) =>
-  render(<MemoryRouter initialEntries={['/']}>{ui}</MemoryRouter>);
+  render(
+    <MemoryRouter initialEntries={['/']}>
+      <ThemeProvider theme={theme}>
+        {ui}
+      </ThemeProvider>
+    </MemoryRouter>
+  );
 
 describe('Header', () => {
   it('renders the header logo link', () => {
@@ -20,14 +32,14 @@ describe('Header', () => {
   it('renders the login button', () => {
     renderWithRouter(<Header />);
     expect(
-      screen.getByRole('button', { name: /sign in/i })
+      screen.getByRole('link', { name: /sign in/i })
     ).toBeInTheDocument();
   });
 
   it('renders the sign up button', () => {
     renderWithRouter(<Header />);
     expect(
-      screen.getByRole('button', { name: /sign up/i })
+      screen.getByRole('link', { name: /sign up/i })
     ).toBeInTheDocument();
   });
 });

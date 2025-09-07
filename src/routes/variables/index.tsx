@@ -8,5 +8,5 @@ export function meta() {
 }
 
 export default function Variables() {
-  return <Container maxWidth="sm">Variables1</Container>;
+  return <Container maxWidth="sm">Variables</Container>;
 }
