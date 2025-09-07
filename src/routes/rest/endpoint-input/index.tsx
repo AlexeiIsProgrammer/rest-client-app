@@ -1,12 +1,8 @@
 import React from 'react';
 import { TextField } from '@mui/material';
+import type { EndpointInputProps } from './types';
 
-interface EndpointInputProps {
-  url: string;
-  setUrl: (url: string) => void;
-}
-
-const EndpointInput: React.FC<EndpointInputProps> = ({ url, setUrl }) => {
+const EndpointInput = ({ url, setUrl }: EndpointInputProps) => {
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
   };

@@ -1,7 +1,8 @@
-import { TextField, Box, Typography } from '@mui/material';
+import { TextField, Box, Typography, Button } from '@mui/material';
 import { JsonViewer } from '@textea/json-viewer';
 import type { RequestBodyEditorProps } from './types';
 import { METHODS } from '~/constants';
+import { useEffect, useState } from 'react';
 
 const RequestBodyEditor = ({
   body,
@@ -10,13 +11,29 @@ const RequestBodyEditor = ({
 }: RequestBodyEditorProps) => {
   const hasBody = [METHODS.POST, METHODS.PUT, METHODS.PATCH].includes(method);
 
-  // const parsedBody = useMemo(() => {
-  //   try {
-  // JSON.parse(body)
-  //   } catch () {
+  const [parsedBody, setParsedBody] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
 
-  //   }
-  // }, [body])
+  const prettifyHandle = () => {
+    const parsed = JSON.parse(body);
+    const prettyfied = JSON.stringify(parsed, null, 2);
+    setBody(prettyfied);
+    console.log('prettyfied', prettyfied);
+  };
+
+  useEffect(() => {
+    setError(false);
+
+    if (!body) return;
+
+    try {
+      const parsed = JSON.parse(body);
+
+      setParsedBody(parsed);
+    } catch {
+      setError(true);
+    }
+  }, [body]);
 
   if (!hasBody) {
     return (
@@ -30,7 +47,18 @@ const RequestBodyEditor = ({
 
   return (
     <Box py={3}>
+      <Button
+        type="button"
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={prettifyHandle}
+        sx={{ mb: 2 }}
+      >
+        Prettify
+      </Button>
       <TextField
+        error={error}
         fullWidth
         multiline
         minRows={6}
@@ -38,7 +66,7 @@ const RequestBodyEditor = ({
         value={body}
         onChange={(e) => setBody(e.target.value)}
         placeholder='{"key": "value"}'
-        label="Request Body"
+        label={error ? 'Invalid JSON' : 'Request Body'}
       />
 
       {body && (
@@ -46,7 +74,7 @@ const RequestBodyEditor = ({
           <Typography variant="h6" gutterBottom>
             Parsed View:
           </Typography>
-          <JsonViewer value={JSON.parse(body)} />
+          <JsonViewer value={parsedBody} />
         </Box>
       )}
     </Box>

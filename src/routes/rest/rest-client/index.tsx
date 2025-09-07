@@ -11,7 +11,6 @@ import {
   styled,
 } from '@mui/material';
 import type { RESTClientProps } from './types';
-// import { useNavigate } from 'react-router';
 import MethodSelector from '../method-selector';
 import { useRESTClient } from '~/hooks/useRESTClient';
 import HeadersEditor from '../headers-editor';
@@ -21,6 +20,7 @@ import GeneratedCode from '../generated-code';
 import ResponseSection from '../response-section';
 import { type Header } from '~/types';
 import { METHODS } from '~/constants';
+import { useNavigate } from 'react-router';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -41,11 +41,7 @@ const RESTClient = ({
   const [urlError, setUrlError] = useState('');
 
   const { response, loading, sendRequest } = useRESTClient();
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   updateURL();
-  // }, [method, url, requestBody, headers]);
+  const navigate = useNavigate();
 
   const validateUrl = (url: string): string => {
     if (!url) return 'URL is required';
@@ -57,27 +53,27 @@ const RESTClient = ({
     }
   };
 
-  // const updateURL = () => {
-  //   const error = validateUrl(url);
-  //   setUrlError(error);
+  const updateURL = () => {
+    const error = validateUrl(url);
+    setUrlError(error);
 
-  //   if (error) return;
+    if (error) return;
 
-  //   const encodedUrl = btoa(url);
-  //   const encodedBody = requestBody ? btoa(JSON.stringify(requestBody)) : '';
+    const encodedUrl = btoa(url);
+    const encodedBody = requestBody ? btoa(JSON.stringify(requestBody)) : '';
 
-  //   const queryParams = new URLSearchParams();
-  //   headers.forEach(({ name, value }) => {
-  //     if (name && value) {
-  //       queryParams.append(name, encodeURIComponent(value));
-  //     }
-  //   });
+    const queryParams = new URLSearchParams();
+    headers.forEach(({ name, value }) => {
+      if (name && value) {
+        queryParams.append(name, encodeURIComponent(value));
+      }
+    });
 
-  //   const queryString = queryParams.toString();
-  //   const newPath = `/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryString ? `?${queryString}` : ''}`;
+    const queryString = queryParams.toString();
+    const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryString ? `?${queryString}` : ''}`;
 
-  //   navigate(newPath, { replace: true });
-  // };
+    navigate(newPath, { replace: true });
+  };
 
   const handleSendRequest = async () => {
     const error = validateUrl(url);
@@ -85,6 +81,7 @@ const RESTClient = ({
 
     if (error) return;
 
+    updateURL();
     await sendRequest(method, url, requestBody, headers);
   };
 
@@ -121,7 +118,7 @@ const RESTClient = ({
       <StyledPaper>
         <Tabs
           value={activeTab}
-          onChange={(e, newValue) => setActiveTab(newValue)}
+          onChange={(_, newValue) => setActiveTab(newValue)}
         >
           <Tab label="Body" />
           <Tab label="Headers" />

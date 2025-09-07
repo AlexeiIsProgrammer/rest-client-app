@@ -8,7 +8,7 @@ import {
   Paper,
 } from '@mui/material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import atomDark from 'react-syntax-highlighter/dist/esm/styles/prism/atom-dark';
 import type { GeneratedCodeProps } from './types';
 import { generateCode } from '~/utils/codeGenerators';
 import { LANGUAGE_OPTIONS, LANGUAGES } from '~/constants';
@@ -40,6 +40,7 @@ const GeneratedCode = ({ method, url, body, headers }: GeneratedCodeProps) => {
       </FormControl>
 
       <Paper elevation={2}>
+        {/* {code} */}
         <SyntaxHighlighter
           language={
             language.includes('javascript') || language === LANGUAGES.nodejs

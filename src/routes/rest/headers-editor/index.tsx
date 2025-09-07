@@ -6,7 +6,9 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { Add, Delete } from '@mui/icons-material';
+
+import Add from '@mui/icons-material/Add';
+import Delete from '@mui/icons-material/Delete';
 import type { HeadersEditorProps } from './types';
 import type { Header } from '~/types';
 

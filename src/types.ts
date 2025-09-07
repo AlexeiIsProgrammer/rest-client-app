@@ -13,6 +13,8 @@ export type Header = {
   value: string;
 };
 
+export type RequestHeader = Record<string, string>;
+
 export type RequestData = {
   method: string;
   url: string;

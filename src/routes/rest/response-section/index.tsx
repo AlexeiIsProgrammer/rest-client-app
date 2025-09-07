@@ -12,37 +12,24 @@ import {
   IconButton,
   Collapse,
 } from '@mui/material';
-import {
-  ExpandMore,
-  ExpandLess,
-  CheckCircle,
-  Cancel,
-} from '@mui/icons-material';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import CheckCircle from '@mui/icons-material/CheckCircle';
+import Cancel from '@mui/icons-material/Cancel';
+import type { ResponseSectionProps } from './types';
+
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import atomDark from 'react-syntax-highlighter/dist/esm/styles/prism/atom-dark';
 
-interface RESTResponse {
-  status?: number;
-  statusText?: string;
-  headers?: Record<string, string>;
-  data?: string;
-  error?: string;
-  time?: number;
-  duration?: number;
-}
-
-interface ResponseSectionProps {
-  response: RESTResponse | null;
-}
-
-const ResponseSection: React.FC<ResponseSectionProps> = ({ response }) => {
+const ResponseSection = ({ response }: ResponseSectionProps) => {
   const [activeTab, setActiveTab] = useState(0);
   const [expandedHeaders, setExpandedHeaders] = useState(false);
 
   if (!response) return null;
 
   const isError = response.error || (response.status && response.status >= 400);
-  const responseTime = response.time ? ` (${response.duration}ms)` : '';
+  const responseTime =
+    response.time && response.duration ? ` (${response.duration} ms)` : '';
 
   return (
     <Paper elevation={2} sx={{ mt: 3, p: 2 }}>
@@ -120,15 +107,7 @@ const ResponseSection: React.FC<ResponseSectionProps> = ({ response }) => {
               <List dense>
                 {Object.entries(response.headers).map(([key, value]) => (
                   <ListItem key={key} divider>
-                    <ListItemText
-                      primary={key}
-                      secondary={value}
-                      primaryTypographyProps={{
-                        variant: 'body2',
-                        fontWeight: 'bold',
-                      }}
-                      secondaryTypographyProps={{ variant: 'body2' }}
-                    />
+                    <ListItemText primary={key} secondary={value} />
                   </ListItem>
                 ))}
               </List>

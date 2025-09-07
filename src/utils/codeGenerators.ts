@@ -1,13 +1,24 @@
 import { LANGUAGES, METHODS } from '~/constants';
-import type { Header } from '~/types';
+import type { Header, RequestHeader } from '~/types';
+
+const arrayToObject = (arr: Header[]): RequestHeader =>
+  arr.reduce(
+    (acc, item) => ({
+      ...acc,
+      [item.name]: item.value,
+    }),
+    {}
+  );
 
 export const generateCode = (
   method: METHODS,
   url: string = '',
   body: string,
-  headers: Header[],
+  requestHeaders: Header[],
   language: LANGUAGES
 ): string => {
+  const headers = arrayToObject(requestHeaders);
+
   switch (language) {
     case LANGUAGES.curl:
       return generateCurlCode(method, url, body, headers);
@@ -34,7 +45,7 @@ const generateCurlCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   let curlCommand = `curl -X ${method} "${url}"`;
 
@@ -56,7 +67,7 @@ const generateJavascriptFetchCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   let code = `fetch("${url}", {\n`;
   code += `  method: "${method}",\n`;
@@ -94,7 +105,7 @@ const generateJavascriptXHRCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   let code = `const xhr = new XMLHttpRequest();\n`;
   code += `xhr.open("${method}", "${url}");\n\n`;
@@ -125,7 +136,7 @@ const generateNodeJSCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   const urlObj = new URL(url || location.href);
   const isHttps = urlObj.protocol === 'https:';
@@ -181,7 +192,7 @@ const generatePythonCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   let code = `import requests\n\n`;
 
@@ -224,7 +235,7 @@ const generateJavaCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   let code = `import java.net.HttpURLConnection;\n`;
   code += `import java.net.URL;\n`;
@@ -274,7 +285,7 @@ const generateCSharpCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   let code = `using System;\n`;
   code += `using System.Net;\n`;
@@ -333,7 +344,7 @@ const generateGoCode = (
   method: METHODS,
   url: string,
   body: string,
-  headers: Header[]
+  headers: RequestHeader
 ): string => {
   let code = `package main\n\n`;
   code += `import (\n`;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { METHODS } from '~/constants';
 import type { Header, RESTResponse } from '~/types';
 
 export const useRESTClient = () => {
@@ -6,7 +7,7 @@ export const useRESTClient = () => {
   const [loading, setLoading] = useState(false);
 
   const sendRequest = async (
-    method: string,
+    method: METHODS,
     url: string,
     body: string,
     headers: Header[]
@@ -24,7 +25,12 @@ export const useRESTClient = () => {
         },
       };
 
-      if (body && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+      if (
+        body &&
+        [METHODS.POST, METHODS.PUT, METHODS.PATCH, METHODS.DELETE].includes(
+          method
+        )
+      ) {
         try {
           options.body = JSON.stringify(JSON.parse(body));
         } catch {
