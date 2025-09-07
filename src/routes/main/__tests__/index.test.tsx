@@ -1,11 +1,18 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import Main from '..';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
+
+vi.mock('react-firebase-hooks/auth', () => ({
+  useAuthState: () => [{ email: 'test@example.com' }, false],
+}));
 
 test('Main renders', async () => {
-  const TITLE = 'Main';
+  render(
+    <MemoryRouter>
+      <Main />
+    </MemoryRouter>
+  );
 
-  render(<Main />);
-
-  expect(screen.getByText(TITLE)).toBeInTheDocument();
+  expect(await screen.getByText(/welcome/i)).toBeInTheDocument();
 });

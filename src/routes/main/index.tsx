@@ -1,4 +1,8 @@
-import { Container } from '@mui/material';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase';
+import Spinner from '../../components/Spinner/Spinner';
+import MainNonAuthorized from '../../components/Main/MainNonAuthorized';
+import MainAuthorized from '../../components/Main/MainAuthorized';
 
 export function meta() {
   return [
@@ -8,5 +12,15 @@ export function meta() {
 }
 
 export default function Main() {
-  return <Container maxWidth="sm">Main</Container>;
+  const [user, loading] = useAuthState(auth);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (user && user.email) {
+    return <MainAuthorized email={user.email} />;
+  } else {
+    return <MainNonAuthorized />;
+  }
 }
