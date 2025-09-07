@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Container,
   Paper,
@@ -21,6 +21,7 @@ import ResponseSection from '../response-section';
 import { type Header } from '~/types';
 import { METHODS } from '~/constants';
 import { useNavigate } from 'react-router';
+import validateUrl from '~/utils/validateUrl';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -38,25 +39,13 @@ const RESTClient = ({
   const [requestBody, setRequestBody] = useState<string>(initialBody);
   const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [activeTab, setActiveTab] = useState(0);
-  const [urlError, setUrlError] = useState('');
 
   const { response, loading, sendRequest } = useRESTClient();
   const navigate = useNavigate();
 
-  const validateUrl = (url: string): string => {
-    if (!url) return 'URL is required';
-    try {
-      new URL(url);
-      return '';
-    } catch {
-      return 'Please enter a valid URL';
-    }
-  };
+  const error = useMemo(() => validateUrl(url), [url]);
 
   const updateURL = () => {
-    const error = validateUrl(url);
-    setUrlError(error);
-
     if (error) return;
 
     const encodedUrl = btoa(url);
@@ -76,9 +65,6 @@ const RESTClient = ({
   };
 
   const handleSendRequest = async () => {
-    const error = validateUrl(url);
-    setUrlError(error);
-
     if (error) return;
 
     updateURL();
@@ -94,9 +80,9 @@ const RESTClient = ({
           </Grid>
           <Grid>
             <EndpointInput url={url} setUrl={setUrl} />
-            {urlError && (
+            {error && (
               <Alert severity="error" sx={{ mt: 1 }}>
-                {urlError}
+                {error}
               </Alert>
             )}
           </Grid>
@@ -106,7 +92,7 @@ const RESTClient = ({
               color="primary"
               fullWidth
               onClick={handleSendRequest}
-              disabled={loading || !!urlError}
+              disabled={loading || !!error}
               size="large"
             >
               {loading ? 'Sending...' : 'Send'}
