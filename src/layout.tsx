@@ -1,15 +1,13 @@
 import { Outlet } from 'react-router';
-import { logout } from './firebase';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
 
 const Layout = () => {
   return (
     <div>
-      <header>
-        Header
-        <button onClick={() => logout()}>Logout</button>
-      </header>
+      <Header />
       <Outlet />
-      <header>Footer</header>
+      <Footer />
     </div>
   );
 };
