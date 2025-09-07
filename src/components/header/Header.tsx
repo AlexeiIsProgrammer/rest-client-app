@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from "react-router-dom";
+import { Link } from 'react-router';
 import { logout } from '../../firebase';
 import {
   AppBar,
@@ -10,13 +10,17 @@ import {
   useScrollTrigger,
 } from '@mui/material';
 import { Login, Logout, PersonAdd } from '@mui/icons-material';
-import RSSLogo from '../../assets/images/rss-logo.svg';
+import Students from '../../assets/images/mentor-with-his-students.svg';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase';
 
 function Header(): React.ReactElement {
   const isScrolled = useScrollTrigger({
     disableHysteresis: true,
     threshold: 10,
   });
+
+  const [user] = useAuthState(auth);
 
   return (
     <AppBar
@@ -26,6 +30,7 @@ function Header(): React.ReactElement {
         backgroundColor: isScrolled ? '#F5F5F5' : '#E0E2E6',
         boxShadow: isScrolled ? '0 2px 8px rgba(0,0,0,0.1)' : 'none',
         transition: 'all 0.3s ease-in-out',
+        width: '99vw',
       }}
     >
       <Toolbar
@@ -37,16 +42,16 @@ function Header(): React.ReactElement {
         }}
       >
         <ButtonBase
-          component={RouterLink}
+          component={Link}
           to="/"
           aria-label="Go to home"
           sx={{ p: 0.5, borderRadius: 1 }}
         >
           <Box
             component="img"
-            src={RSSLogo}
+            src={Students}
             alt="Logo"
-            sx={{ height: 32, display: 'block' }}
+            sx={{ height: 42, display: 'block' }}
           />
         </ButtonBase>
 
@@ -56,21 +61,38 @@ function Header(): React.ReactElement {
           </Button>
         </Box>
 
-        <Box sx={{ '& button': { m: 1 } }}>
-          <Button startIcon={<Login />} variant="outlined" size="medium">
-            Sign In
-          </Button>
-          <Button startIcon={<PersonAdd />} variant="outlined" size="medium">
-            Sign Up
-          </Button>
-          <Button
-            startIcon={<Logout />}
-            variant="outlined"
-            size="medium"
-            onClick={() => logout()}
-          >
-            Logout
-          </Button>
+        <Box sx={{ '& > *': { m: 1 } }}>
+          {user && user.email ? (
+            <Button
+              startIcon={<Logout />}
+              variant="outlined"
+              size="medium"
+              onClick={() => logout()}
+            >
+              Logout
+            </Button>
+          ) : (
+            <>
+              <Button
+                component={Link}
+                to="/signin"
+                startIcon={<Login />}
+                variant="outlined"
+                size="medium"
+              >
+                Sign In
+              </Button>
+              <Button
+                component={Link}
+                to="/signup"
+                startIcon={<PersonAdd />}
+                variant="outlined"
+                size="medium"
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

@@ -1,4 +1,5 @@
 import { Links, Meta, Scripts, ScrollRestoration } from 'react-router';
+import { Box } from '@mui/material';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +11,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <Box sx={{ pb: '64px' }}>{children}</Box>
         <ScrollRestoration />
         <Scripts />
       </body>

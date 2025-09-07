@@ -1,28 +1,33 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from 'react-router-dom';
 import Header from '../Header';
 import { describe, it, expect, vi } from 'vitest';
 
-vi.mock("@mui/material/useScrollTrigger", () => ({ default: () => false }));
+vi.mock('@mui/material/useScrollTrigger', () => ({ default: () => false }));
 
 const renderWithRouter = (ui: React.ReactElement) =>
-  render(<MemoryRouter initialEntries={["/"]}>{ui}</MemoryRouter>);
+  render(<MemoryRouter initialEntries={['/']}>{ui}</MemoryRouter>);
 
 describe('Header', () => {
-
-it("renders the header logo link", () => {
+  it('renders the header logo link', () => {
     renderWithRouter(<Header />);
-    expect(screen.getByRole("link", { name: /go to home/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /go to home/i })
+    ).toBeInTheDocument();
     expect(screen.getByAltText(/logo/i)).toBeInTheDocument();
   });
 
-  it("renders the login button", () => {
+  it('renders the login button', () => {
     renderWithRouter(<Header />);
-    expect(screen.getByRole("button", { name: /sign in/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /sign in/i })
+    ).toBeInTheDocument();
   });
 
-  it("renders the sign up button", () => {
+  it('renders the sign up button', () => {
     renderWithRouter(<Header />);
-    expect(screen.getByRole("button", { name: /sign up/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /sign up/i })
+    ).toBeInTheDocument();
   });
 });
