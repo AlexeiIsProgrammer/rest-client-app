@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import RESTClient from './rest-client';
 
 export function meta() {
   return [
@@ -8,5 +8,12 @@ export function meta() {
 }
 
 export default function Rest() {
-  return <Container maxWidth="sm">Rest</Container>;
+  return (
+    <RESTClient
+      // initialMethod={method || 'GET'}
+      // initialUrl={url}
+      initialBody='{"foo":1}'
+      // initialHeaders={headers}
+    />
+  );
 }
