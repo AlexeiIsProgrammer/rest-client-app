@@ -11,7 +11,7 @@ export default [
     route('signup', 'routes/signup/index.tsx'),
     route('signin', 'routes/signin/index.tsx'),
     layout('./routes/PrivateRoute.tsx', [
-      route('rest', './routes/rest/index.tsx'),
+      route('rest/*', './routes/rest/index.tsx'),
       route('variables', './routes/variables/index.tsx'),
       route('history', './routes/history/index.tsx'),
     ]),

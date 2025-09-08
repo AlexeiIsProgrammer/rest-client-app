@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 import { logout } from '../../firebase';
 import {
   AppBar,
@@ -9,7 +9,9 @@ import {
   ButtonBase,
   useScrollTrigger,
 } from '@mui/material';
-import { Login, Logout, PersonAdd } from '@mui/icons-material';
+import Login from '@mui/icons-material/Login';
+import Logout from '@mui/icons-material/Logout';
+import PersonAdd from '@mui/icons-material/PersonAdd';
 import RSSLogo from '../../assets/images/rss-logo.svg';
 
 function Header(): React.ReactElement {
