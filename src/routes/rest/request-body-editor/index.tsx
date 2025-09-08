@@ -15,10 +15,11 @@ const RequestBodyEditor = ({
   const [error, setError] = useState<boolean>(false);
 
   const prettifyHandle = () => {
+    if (!body || error) return;
+
     const parsed = JSON.parse(body);
     const prettyfied = JSON.stringify(parsed, null, 2);
     setBody(prettyfied);
-    console.log('prettyfied', prettyfied);
   };
 
   useEffect(() => {

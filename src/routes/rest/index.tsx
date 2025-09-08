@@ -46,7 +46,7 @@ const RESTClientWrapper = () => {
 
     return (
       <RESTClient
-        initialMethod={(method as METHODS) || 'GET'}
+        initialMethod={(method.toUpperCase() as METHODS) || 'GET'}
         initialUrl={url}
         initialBody={body}
         initialHeaders={headers}
