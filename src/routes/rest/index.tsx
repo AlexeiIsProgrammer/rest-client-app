@@ -3,7 +3,7 @@ import RESTClient from './rest-client';
 import { Alert, Box, Typography } from '@mui/material';
 
 import { type Header } from '~/types';
-import type { METHODS } from '~/constants';
+import { METHODS } from '~/constants';
 
 export function meta() {
   return [
@@ -46,7 +46,7 @@ const RESTClientWrapper = () => {
 
     return (
       <RESTClient
-        initialMethod={(method.toUpperCase() as METHODS) || 'GET'}
+        initialMethod={method ? (method.toUpperCase() as METHODS) : METHODS.GET}
         initialUrl={url}
         initialBody={body}
         initialHeaders={headers}
