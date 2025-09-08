@@ -6,7 +6,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('@mui/material/useScrollTrigger', () => ({ default: () => false }));
 vi.mock('react-firebase-hooks/auth', () => ({
-  useAuthState: () => [null, false, null]
+  useAuthState: () => [null, false, null],
 }));
 
 const theme = createTheme();
@@ -14,9 +14,7 @@ const theme = createTheme();
 const renderWithRouter = (ui: React.ReactElement) =>
   render(
     <MemoryRouter initialEntries={['/']}>
-      <ThemeProvider theme={theme}>
-        {ui}
-      </ThemeProvider>
+      <ThemeProvider theme={theme}>{ui}</ThemeProvider>
     </MemoryRouter>
   );
 
@@ -31,15 +29,11 @@ describe('Header', () => {
 
   it('renders the login button', () => {
     renderWithRouter(<Header />);
-    expect(
-      screen.getByRole('link', { name: /sign in/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /sign in/i })).toBeInTheDocument();
   });
 
   it('renders the sign up button', () => {
     renderWithRouter(<Header />);
-    expect(
-      screen.getByRole('link', { name: /sign up/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /sign up/i })).toBeInTheDocument();
   });
 });
