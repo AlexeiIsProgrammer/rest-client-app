@@ -1,4 +1,4 @@
-import authLoader from '../../utils/authLoader';
+import { requireGuestLoader } from '../../utils/authLoaders';
 import { useState } from 'react';
 import { Container, Typography } from '@mui/material';
 import Spinner from '../../components/Spinner/Spinner';
@@ -7,7 +7,7 @@ import { logInWithEmailAndPassword } from '../../firebase';
 import { validateEmail } from '../../utils/validation';
 import { useNavigate, Link } from 'react-router';
 
-export const loader = authLoader;
+export const loader = requireGuestLoader;
 
 export default function SignIn() {
   const [isFetching, setIsFetching] = useState(false);

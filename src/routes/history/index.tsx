@@ -1,5 +1,4 @@
-import { redirect } from 'react-router';
-import { getUserFromRequest } from '../../utils/auth.server';
+import { requireAuthLoader } from '../../utils/authLoaders';
 import { Container } from '@mui/material';
 
 export function meta() {
@@ -9,13 +8,7 @@ export function meta() {
   ];
 }
 
-export async function loader({ request }: { request: Request }) {
-  const user = await getUserFromRequest(request);
-
-  if (!user) {
-    throw redirect('/signin');
-  }
-}
+export const loader = requireAuthLoader;
 
 export default function History() {
   return <Container maxWidth="sm">History</Container>;
