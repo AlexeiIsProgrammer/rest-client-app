@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container,
   Paper,
@@ -42,11 +42,9 @@ const RESTClient = ({
 
   const navigate = useNavigate();
 
-  const error = useMemo(() => validateUrl(url), [url]);
+  const [error, setError] = useState('');
 
   const updateURL = () => {
-    if (error) return;
-
     const encodedUrl = btoa(url);
     const encodedBody = requestBody ? btoa(JSON.stringify(requestBody)) : '';
 
@@ -63,11 +61,21 @@ const RESTClient = ({
     navigate(newPath, { replace: true });
   };
 
-  const handleSendRequest = async () => {
-    if (error) return;
+  const handleSendRequest = () => {
+    const error = validateUrl(url);
+    if (error) {
+      setError(error);
+      return;
+    }
 
     updateURL();
   };
+
+  useEffect(() => {
+    if (!url) return;
+
+    setError(validateUrl(url));
+  }, [url]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 3 }}>
