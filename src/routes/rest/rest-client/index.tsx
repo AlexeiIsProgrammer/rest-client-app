@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import type { RESTClientProps } from './types';
 import MethodSelector from '../method-selector';
-import { useRESTClient } from '~/hooks/useRESTClient';
 import HeadersEditor from '../headers-editor';
 import RequestBodyEditor from '../request-body-editor';
 import EndpointInput from '../endpoint-input';
@@ -33,6 +32,7 @@ const RESTClient = ({
   initialUrl = '',
   initialBody = '',
   initialHeaders = [],
+  response,
 }: RESTClientProps) => {
   const [method, setMethod] = useState<METHODS>(initialMethod);
   const [url, setUrl] = useState<string>(initialUrl);
@@ -40,7 +40,6 @@ const RESTClient = ({
   const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [activeTab, setActiveTab] = useState(0);
 
-  const { response, loading, sendRequest } = useRESTClient();
   const navigate = useNavigate();
 
   const error = useMemo(() => validateUrl(url), [url]);
@@ -68,7 +67,6 @@ const RESTClient = ({
     if (error) return;
 
     updateURL();
-    await sendRequest(method, url, requestBody, headers);
   };
 
   return (
@@ -92,10 +90,10 @@ const RESTClient = ({
               color="primary"
               fullWidth
               onClick={handleSendRequest}
-              disabled={loading || !!error}
+              disabled={!!error}
               size="large"
             >
-              {loading ? 'Sending...' : 'Send'}
+              Send
             </Button>
           </Grid>
         </Grid>

@@ -1,9 +1,10 @@
-import { Routes, Route, useParams, useSearchParams } from 'react-router';
+import { useParams, useSearchParams, useLoaderData } from 'react-router';
 import RESTClient from './rest-client';
 import { Alert, Box, Typography } from '@mui/material';
 
-import { type Header } from '~/types';
-import { METHODS } from '~/constants';
+import { sendServerRequest } from '~/hooks/useRESTClient/sendServerRequest';
+import type { Route as RouteType } from './+types';
+import getParams from '~/utils/getUrlParams';
 
 export function meta() {
   return [
@@ -12,44 +13,43 @@ export function meta() {
   ];
 }
 
-const RESTClientPage: React.FC = () => {
-  return (
-    <Routes>
-      <Route
-        path="/:method?/:encodedUrl?/:encodedBody?"
-        element={<RESTClientWrapper />}
-      />
-    </Routes>
-  );
-};
+export async function loader({ params, request }: RouteType.LoaderArgs) {
+  const { searchParams } = new URL(request.url);
+  const { method, encodedUrl, encodedBody } = params;
+
+  const { url, body, initialMethod, headers } = getParams({
+    method,
+    encodedBody,
+    encodedUrl,
+    searchParams,
+  });
+
+  if (!url) return null;
+
+  return await sendServerRequest(initialMethod, url, body, headers);
+}
 
 const RESTClientWrapper = () => {
+  const response = useLoaderData<typeof loader>();
+
   const { method, encodedUrl, encodedBody } = useParams();
   const [searchParams] = useSearchParams();
 
   try {
-    const headers: Header[] = [];
-    for (const [key, value] of searchParams.entries()) {
-      headers.push({ name: key, value: decodeURIComponent(value) });
-    }
-
-    const url = encodedUrl ? atob(encodedUrl) : '';
-    let body = '';
-
-    if (encodedBody) {
-      try {
-        body = JSON.parse(atob(encodedBody));
-      } catch {
-        body = atob(encodedBody);
-      }
-    }
+    const { url, body, initialMethod, headers } = getParams({
+      method,
+      encodedBody,
+      encodedUrl,
+      searchParams,
+    });
 
     return (
       <RESTClient
-        initialMethod={method ? (method.toUpperCase() as METHODS) : METHODS.GET}
+        initialMethod={initialMethod}
         initialUrl={url}
         initialBody={body}
         initialHeaders={headers}
+        response={response}
       />
     );
   } catch (error) {
@@ -67,4 +67,4 @@ const RESTClientWrapper = () => {
   }
 };
 
-export default RESTClientPage;
+export default RESTClientWrapper;
