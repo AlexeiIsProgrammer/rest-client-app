@@ -14,10 +14,10 @@ export const loadVariablesFromStorage = (): Variable[] => {
   try {
     const stored = localStorage.getItem(VARIABLES_STORAGE_KEY);
     if (!stored) return [];
-    
+
     const parsed = JSON.parse(stored);
     if (!Array.isArray(parsed)) return [];
-    
+
     return parsed.filter(
       (item): item is Variable =>
         typeof item === 'object' &&
@@ -45,16 +45,16 @@ export const substituteVariables = (
   variables: Variable[]
 ): string => {
   let result = text;
-  
+
   const variableMap = new Map(
-    variables.map(variable => [variable.name, variable.value])
+    variables.map((variable) => [variable.name, variable.value])
   );
-  
+
   result = result.replace(/\{\{([^}]+)\}\}/g, (match, variableName) => {
     const trimmedName = variableName.trim();
     const value = variableMap.get(trimmedName);
     return value !== undefined ? value : match;
   });
-  
+
   return result;
 };

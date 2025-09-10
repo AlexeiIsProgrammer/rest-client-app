@@ -28,23 +28,26 @@ export const useVariables = () => {
       name: name.trim(),
       value: value.trim(),
     };
-    
-    setVariables(prev => [...prev, newVariable]);
+
+    setVariables((prev) => [...prev, newVariable]);
     return newVariable;
   }, []);
 
-  const updateVariable = useCallback((id: string, name: string, value: string) => {
-    setVariables(prev =>
-      prev.map(variable =>
-        variable.id === id
-          ? { ...variable, name: name.trim(), value: value.trim() }
-          : variable
-      )
-    );
-  }, []);
+  const updateVariable = useCallback(
+    (id: string, name: string, value: string) => {
+      setVariables((prev) =>
+        prev.map((variable) =>
+          variable.id === id
+            ? { ...variable, name: name.trim(), value: value.trim() }
+            : variable
+        )
+      );
+    },
+    []
+  );
 
   const deleteVariable = useCallback((id: string) => {
-    setVariables(prev => prev.filter(variable => variable.id !== id));
+    setVariables((prev) => prev.filter((variable) => variable.id !== id));
   }, []);
 
   const clearAllVariables = useCallback(() => {
@@ -52,9 +55,12 @@ export const useVariables = () => {
     clearVariablesFromStorage();
   }, []);
 
-  const getVariableByName = useCallback((name: string) => {
-    return variables.find(variable => variable.name === name);
-  }, [variables]);
+  const getVariableByName = useCallback(
+    (name: string) => {
+      return variables.find((variable) => variable.name === name);
+    },
+    [variables]
+  );
 
   const loadVariables = useCallback(() => {
     const loadedVariables = loadVariablesFromStorage();
