@@ -2,8 +2,10 @@ import { Routes, Route, useParams, useSearchParams } from 'react-router';
 import RESTClient from './rest-client';
 import { Alert, Box, Typography } from '@mui/material';
 
+import { requireAuthLoader } from '../../utils/authLoaders';
+
 import { type Header } from '~/types';
-import { METHODS } from '~/constants';
+import type { METHODS } from '~/constants';
 
 export function meta() {
   return [
@@ -11,6 +13,8 @@ export function meta() {
     { name: 'description', content: 'Welcome to Rest page!' },
   ];
 }
+
+export const loader = requireAuthLoader;
 
 const RESTClientPage: React.FC = () => {
   return (
@@ -46,7 +50,7 @@ const RESTClientWrapper = () => {
 
     return (
       <RESTClient
-        initialMethod={method ? (method.toUpperCase() as METHODS) : METHODS.GET}
+        initialMethod={(method?.toUpperCase() as METHODS) || 'GET'}
         initialUrl={url}
         initialBody={body}
         initialHeaders={headers}
