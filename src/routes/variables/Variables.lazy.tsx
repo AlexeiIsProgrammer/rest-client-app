@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
-// Lazy load the Variables component to ensure it's not loaded for unauthenticated users
 const VariablesComponent = lazy(() => import('./index'));
 
 const VariablesLoading = () => (

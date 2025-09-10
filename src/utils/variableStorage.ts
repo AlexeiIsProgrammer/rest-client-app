@@ -63,8 +63,9 @@ export const loadVariablesFromStorage = (userId: string): Variable[] => {
 export const clearVariablesFromStorage = (userId: string): void => {
   try {
     const allVariables = loadAllUserVariables();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [userId]: removed, ...remainingVariables } = allVariables;
+    const remainingVariables = Object.fromEntries(
+      Object.entries(allVariables).filter(([key]) => key !== userId)
+    );
     saveAllUserVariables(remainingVariables);
   } catch (error) {
     console.error('Failed to clear variables from localStorage:', error);
