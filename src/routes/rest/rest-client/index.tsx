@@ -23,6 +23,9 @@ import { METHODS } from '~/constants';
 import { useNavigate } from 'react-router';
 import validateUrl from '~/utils/validateUrl';
 
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '~/firebase';
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   marginBottom: theme.spacing(3),
@@ -39,6 +42,7 @@ const RESTClient = ({
   const [requestBody, setRequestBody] = useState<string>(initialBody);
   const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [activeTab, setActiveTab] = useState(0);
+  const [path, setPath] = useState<string>('');
 
   const { response, loading, sendRequest } = useRESTClient();
   const navigate = useNavigate();
@@ -62,13 +66,31 @@ const RESTClient = ({
     const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryString ? `?${queryString}` : ''}`;
 
     navigate(newPath, { replace: true });
+    setPath(newPath);
   };
 
   const handleSendRequest = async () => {
     if (error) return;
 
     updateURL();
-    await sendRequest(method, url, requestBody, headers);
+    const res = await sendRequest(method, url, requestBody, headers);
+
+    const user = auth.currentUser;
+    if (user) {
+      await addDoc(collection(db, 'requests'), {
+        uid: user.uid,
+        endpoint: url,
+        method,
+        statusCode: 'status' in res ? res.status : null,
+        duration: 'duration' in res ? res.duration : null,
+        timestamp: serverTimestamp(),
+        requestSize: requestBody ? JSON.stringify(requestBody).length : 0,
+        responseSize:
+          'data' in res && res.data ? JSON.stringify(res.data).length : 0,
+        error: 'error' in res ? res.error : null,
+        encodedPath: path,
+      });
+    }
   };
 
   return (
