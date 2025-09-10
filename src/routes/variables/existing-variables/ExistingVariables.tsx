@@ -157,9 +157,11 @@ function ExistingVariables() {
           </code>
           <br />• JSON Body:{' '}
           <code>
-            {'{'}&quot;name&quot;: &quot;{'{'}{'{'}
+            {'{'}&quot;name&quot;: &quot;{'{'}
+            {'{'}
             <em>userName</em>
-            {'}'}{'}'}&quot;{'}'}
+            {'}'}
+            {'}'}&quot;{'}'}
           </code>
         </Typography>
         <Table size="small" aria-label="Editable variables">
