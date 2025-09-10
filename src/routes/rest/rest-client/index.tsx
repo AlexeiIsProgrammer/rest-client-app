@@ -22,6 +22,8 @@ import { type Header } from '~/types';
 import { METHODS } from '~/constants';
 import { useNavigate } from 'react-router';
 import validateUrl from '~/utils/validateUrl';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '~/firebase';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -40,7 +42,9 @@ const RESTClient = ({
   const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [activeTab, setActiveTab] = useState(0);
 
-  const { response, loading, sendRequest } = useRESTClient();
+  const [user] = useAuthState(auth);
+  const userId = user?.uid || user?.email || '';
+  const { response, loading, sendRequest } = useRESTClient(userId);
   const navigate = useNavigate();
 
   const error = useMemo(() => validateUrl(url), [url]);

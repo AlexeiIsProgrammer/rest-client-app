@@ -5,7 +5,7 @@ import { vi } from 'vitest';
 vi.mock('../../../context/VariablesContext', () => {
   return {
     useVariablesContext: () => ({
-      variables: [],            
+      variables: [],
       addVariable: vi.fn(),
       updateVariable: vi.fn(),
       deleteVariable: vi.fn(),
@@ -18,5 +18,7 @@ import Variables from '../index';
 
 test('renders Variables heading', () => {
   render(<Variables />);
-  expect(screen.getByRole('heading', { name: /variables/i })).toBeInTheDocument();
+  expect(
+    screen.getByRole('heading', { name: /variables/i })
+  ).toBeInTheDocument();
 });

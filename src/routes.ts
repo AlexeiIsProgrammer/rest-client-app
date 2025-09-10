@@ -12,7 +12,7 @@ export default [
     route('signin', 'routes/signin/index.tsx'),
     layout('./routes/PrivateRoute.tsx', [
       route('rest/*', './routes/rest/index.tsx'),
-      route('variables', './routes/variables/index.tsx'),
+      route('variables', './routes/variables/Variables.lazy.tsx'),
       route('history', './routes/history/index.tsx'),
     ]),
   ]),

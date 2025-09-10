@@ -6,21 +6,23 @@ import {
   clearVariablesFromStorage,
 } from '~/utils/variableStorage';
 
-export const useVariables = () => {
+export const useVariables = (userId: string) => {
   const [variables, setVariables] = useState<Variable[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadedVariables = loadVariablesFromStorage();
-    setVariables(loadedVariables);
-    setLoading(false);
-  }, []);
+    if (userId) {
+      const loadedVariables = loadVariablesFromStorage(userId);
+      setVariables(loadedVariables);
+      setLoading(false);
+    }
+  }, [userId]);
 
   useEffect(() => {
-    if (!loading) {
-      saveVariablesToStorage(variables);
+    if (!loading && userId) {
+      saveVariablesToStorage(variables, userId);
     }
-  }, [variables, loading]);
+  }, [variables, loading, userId]);
 
   const addVariable = useCallback((name: string, value: string) => {
     const newVariable: Variable = {
@@ -52,8 +54,10 @@ export const useVariables = () => {
 
   const clearAllVariables = useCallback(() => {
     setVariables([]);
-    clearVariablesFromStorage();
-  }, []);
+    if (userId) {
+      clearVariablesFromStorage(userId);
+    }
+  }, [userId]);
 
   const getVariableByName = useCallback(
     (name: string) => {
@@ -63,9 +67,11 @@ export const useVariables = () => {
   );
 
   const loadVariables = useCallback(() => {
-    const loadedVariables = loadVariablesFromStorage();
-    setVariables(loadedVariables);
-  }, []);
+    if (userId) {
+      const loadedVariables = loadVariablesFromStorage(userId);
+      setVariables(loadedVariables);
+    }
+  }, [userId]);
 
   return {
     variables,
