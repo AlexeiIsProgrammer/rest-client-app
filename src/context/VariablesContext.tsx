@@ -15,9 +15,13 @@ interface VariablesContextType {
   loadVariables: () => void;
 }
 
-const VariablesContext = createContext<VariablesContextType | undefined>(undefined);
+const VariablesContext = createContext<VariablesContextType | undefined>(
+  undefined
+);
 
-export const VariablesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const VariablesProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, authLoading] = useAuthState(auth);
   const variablesHook = useVariables();
 
@@ -25,7 +29,7 @@ export const VariablesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (!authLoading && user) {
       variablesHook.loadVariables();
     }
-  }, [user, authLoading, variablesHook.loadVariables]);
+  }, [user, authLoading, variablesHook.loadVariables, variablesHook]);
 
   return (
     <VariablesContext.Provider value={variablesHook}>
@@ -37,7 +41,9 @@ export const VariablesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 export const useVariablesContext = (): VariablesContextType => {
   const context = useContext(VariablesContext);
   if (context === undefined) {
-    throw new Error('useVariablesContext must be used within a VariablesProvider');
+    throw new Error(
+      'useVariablesContext must be used within a VariablesProvider'
+    );
   }
   return context;
 };
