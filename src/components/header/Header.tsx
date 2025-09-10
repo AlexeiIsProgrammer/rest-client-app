@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router';
 import { logout } from '../../firebase';
 import {
   AppBar,
@@ -15,10 +15,16 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import RSSLogo from '../../assets/images/rss-logo.svg';
 
 function Header(): React.ReactElement {
+  const navigate = useNavigate();
   const isScrolled = useScrollTrigger({
     disableHysteresis: true,
     threshold: 10,
   });
+
+  const handleLogout = () => {
+    logout();
+    navigate('/signin');
+  };
 
   return (
     <AppBar
@@ -69,7 +75,7 @@ function Header(): React.ReactElement {
             startIcon={<Logout />}
             variant="outlined"
             size="medium"
-            onClick={() => logout()}
+            onClick={handleLogout}
           >
             Logout
           </Button>
