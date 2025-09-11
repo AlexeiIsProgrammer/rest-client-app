@@ -10,7 +10,10 @@ export default [
     index('./routes/main/index.tsx'),
     route('signup', 'routes/signup/index.tsx'),
     route('signin', 'routes/signin/index.tsx'),
-    route('rest/*', './routes/rest/index.tsx'),
+    route(
+      'rest/:method?/:encodedUrl?/:encodedBody?',
+      './routes/rest/index.tsx'
+    ),
     route('variables', './routes/variables/index.tsx'),
     route('history', './routes/history/index.tsx'),
   ]),
