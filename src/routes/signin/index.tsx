@@ -1,14 +1,15 @@
+import { requireGuestLoader } from '../../utils/authLoaders';
 import { useState } from 'react';
 import { Container, Typography } from '@mui/material';
 import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
-import { logInWithEmailAndPassword, auth } from '../../firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { logInWithEmailAndPassword } from '../../firebase';
 import { validateEmail } from '../../utils/validation';
-import { useNavigate, Link, Navigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
+
+export const loader = requireGuestLoader;
 
 export default function SignIn() {
-  const [user, loading] = useAuthState(auth);
   const [isFetching, setIsFetching] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,25 +24,19 @@ export default function SignIn() {
 
     try {
       setIsFetching(true);
-      await logInWithEmailAndPassword(email, password);
+      const userCredential = await logInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      const idToken = await user.getIdToken();
+      document.cookie = `session=${idToken}; path=/; max-age=3600`;
       navigate('/');
     } catch (err) {
+      setIsFetching(false);
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError('An unexpected error occurred');
       }
-    } finally {
-      setIsFetching(false);
     }
-  }
-
-  if (loading) {
-    return <Spinner />;
-  }
-
-  if (user) {
-    return <Navigate to="/" replace />;
   }
 
   return (

@@ -1,6 +1,6 @@
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../firebase';
-import Spinner from '../../components/Spinner/Spinner';
+import { useLoaderData } from 'react-router';
+import { getUserFromRequest } from '../../utils/auth.server';
+// import Spinner from '../../components/Spinner/Spinner';
 import MainNonAuthorized from '../../components/Main/MainNonAuthorized';
 import MainAuthorized from '../../components/Main/MainAuthorized';
 
@@ -11,12 +11,18 @@ export function meta() {
   ];
 }
 
-export default function Main() {
-  const [user, loading] = useAuthState(auth);
+export async function loader({ request }: { request: Request }) {
+  const user = await getUserFromRequest(request);
+  return new Response(JSON.stringify({ user }), {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
 
-  if (loading) {
-    return <Spinner />;
-  }
+export default function Main() {
+  const { user } = useLoaderData();
+  // if (loading) {
+  //   return <Spinner />;
+  // }
 
   if (user && user.email) {
     return <MainAuthorized email={user.email} />;
