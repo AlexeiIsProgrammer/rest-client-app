@@ -1,4 +1,4 @@
-import { useLoaderData, redirect } from 'react-router';
+import { useLoaderData, redirect, Link } from 'react-router';
 import { getDocs, orderBy, query, where, collection } from 'firebase/firestore';
 import { db } from '~/firebase';
 import { getUserFromRequest } from '~/utils/auth.server';
@@ -13,7 +13,7 @@ interface RequestHistoryItem {
   requestSize?: number;
   responseSize?: number;
   error?: string | null;
-  encodedPath?: string;
+  encodedPath: string;
 }
 
 import {
@@ -66,7 +66,7 @@ export default function History() {
         {history.map((item: RequestHistoryItem) => (
           <ListItem key={item.timestamp.seconds} divider>
             <ListItemText
-              primary={` ${item.endpoint}`}
+              primary={<Link to={item.encodedPath}>{item.endpoint}</Link>}
               secondary={
                 <Typography sx={{ color: 'white' }}>
                   {`Status: ${item.statusCode ?? 'N/A'}, Duration: ${item.duration ?? 'N/A'}`}
