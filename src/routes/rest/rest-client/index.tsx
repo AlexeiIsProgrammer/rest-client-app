@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container,
   Paper,
@@ -36,6 +36,7 @@ const RESTClient = ({
   initialUrl = '',
   initialBody = '',
   initialHeaders = [],
+  response,
 }: RESTClientProps) => {
   const [method, setMethod] = useState<METHODS>(initialMethod);
   const [url, setUrl] = useState<string>(initialUrl);
@@ -44,14 +45,12 @@ const RESTClient = ({
   const [activeTab, setActiveTab] = useState(0);
   const [path, setPath] = useState<string>('');
 
-  const { response, loading, sendRequest } = useRESTClient();
+  const { sendRequest } = useRESTClient();
   const navigate = useNavigate();
 
-  const error = useMemo(() => validateUrl(url), [url]);
+  const [error, setError] = useState('');
 
   const updateURL = () => {
-    if (error) return;
-
     const encodedUrl = btoa(url);
     const encodedBody = requestBody ? btoa(JSON.stringify(requestBody)) : '';
 
@@ -70,7 +69,11 @@ const RESTClient = ({
   };
 
   const handleSendRequest = async () => {
-    if (error) return;
+    const error = validateUrl(url);
+    if (error) {
+      setError(error);
+      return;
+    }
 
     updateURL();
     const res = await sendRequest(method, url, requestBody, headers);
@@ -93,6 +96,12 @@ const RESTClient = ({
     }
   };
 
+  useEffect(() => {
+    if (!url) return;
+
+    setError(validateUrl(url));
+  }, [url]);
+
   return (
     <Container maxWidth="lg" sx={{ mt: 3 }}>
       <StyledPaper>
@@ -114,10 +123,10 @@ const RESTClient = ({
               color="primary"
               fullWidth
               onClick={handleSendRequest}
-              disabled={loading || !!error}
+              disabled={!!error}
               size="large"
             >
-              {loading ? 'Sending...' : 'Send'}
+              Send
             </Button>
           </Grid>
         </Grid>
