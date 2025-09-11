@@ -13,6 +13,7 @@ import Login from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import RSSLogo from '../../assets/images/rss-logo.svg';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 function Header(): React.ReactElement {
   const navigate = useNavigate();
@@ -59,9 +60,7 @@ function Header(): React.ReactElement {
         </ButtonBase>
 
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-          <Button variant="outlined" size="medium">
-            Lang Toggle
-          </Button>
+          <LanguageSwitcher />
         </Box>
 
         <Box sx={{ '& button': { m: 1 } }}>

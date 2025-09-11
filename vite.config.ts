@@ -7,8 +7,11 @@ export default defineConfig({
   plugins: [
     !process.env.VITEST && reactRouter(),
     tsconfigPaths(),
-    intLayerMiddlewarePlugin(),
     intlayerPlugin(),
+    intLayerMiddlewarePlugin({
+      matcher:
+        /^\/(?!__manifest|manifest\.json|favicon\.ico|robots\.txt|public\/|.*\.\w+$).*/,
+    }),
   ],
   test: {
     environment: 'jsdom',
