@@ -13,4 +13,5 @@ export async function requireAuthLoader({ request }: { request: Request }) {
   if (!user) {
     return redirect('/signin');
   }
+  return user;
 }

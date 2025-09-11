@@ -5,6 +5,8 @@ import { Alert, Box, Typography } from '@mui/material';
 import { sendServerRequest } from '~/hooks/useRESTClient/sendServerRequest';
 import type { Route as RouteType } from './+types';
 import getParams from '~/utils/getUrlParams';
+import { getUserFromRequest } from '~/utils/auth.server';
+import { redirect } from 'react-router';
 
 export function meta() {
   return [
@@ -14,6 +16,11 @@ export function meta() {
 }
 
 export async function loader({ params, request }: RouteType.LoaderArgs) {
+  const user = await getUserFromRequest(request);
+  if (!user) {
+    return redirect('/signin');
+  }
+
   const { searchParams } = new URL(request.url);
   const { method, encodedUrl, encodedBody } = params;
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Container,
   Paper,
@@ -11,16 +11,20 @@ import {
   styled,
 } from '@mui/material';
 import type { RESTClientProps } from './types';
+import type { User } from 'firebase/auth';
 import MethodSelector from '../method-selector';
 import HeadersEditor from '../headers-editor';
 import RequestBodyEditor from '../request-body-editor';
 import EndpointInput from '../endpoint-input';
 import GeneratedCode from '../generated-code';
 import ResponseSection from '../response-section';
-import { type Header } from '~/types';
+import { type Header, type RESTResponse } from '~/types';
 import { METHODS } from '~/constants';
 import { useNavigate } from 'react-router';
 import validateUrl from '~/utils/validateUrl';
+import saveHistory from '~/utils/saveHistory';
+
+import { auth } from '~/firebase';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -39,6 +43,7 @@ const RESTClient = ({
   const [requestBody, setRequestBody] = useState<string>(initialBody);
   const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [activeTab, setActiveTab] = useState(0);
+  const [path, setPath] = useState<string>('');
 
   const navigate = useNavigate();
 
@@ -59,9 +64,10 @@ const RESTClient = ({
     const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryString ? `?${queryString}` : ''}`;
 
     navigate(newPath, { replace: true });
+    setPath(newPath);
   };
 
-  const handleSendRequest = () => {
+  const handleSendRequest = async () => {
     const error = validateUrl(url);
     if (error) {
       setError(error);
@@ -71,11 +77,25 @@ const RESTClient = ({
     updateURL();
   };
 
+  const saveResponseHistory = useCallback(
+    (response: RESTResponse, user: User) => {
+      saveHistory({ user, url, method, response, requestBody, path });
+    },
+    [url, method, requestBody, path]
+  );
+
   useEffect(() => {
     if (!url) return;
 
     setError(validateUrl(url));
   }, [url]);
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user && response) {
+      saveResponseHistory(response, user);
+    }
+  }, [response, saveResponseHistory]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 3 }}>
