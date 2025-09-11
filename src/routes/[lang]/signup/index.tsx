@@ -1,10 +1,10 @@
-import { requireGuestLoader } from '../../utils/authLoaders';
+import { requireGuestLoader } from '../../../utils/authLoaders';
 import { useState } from 'react';
 import { Container, Typography } from '@mui/material';
-import Spinner from '../../components/Spinner/Spinner';
-import AuthForm from '../../components/AuthForm/AuthForm';
-import { registerWithEmailAndPassword } from '../../firebase';
-import { validateEmail, validatePassword } from '../../utils/validation';
+import Spinner from '../../../components/Spinner/Spinner';
+import AuthForm from '../../../components/AuthForm/AuthForm';
+import { registerWithEmailAndPassword } from '../../../firebase';
+import { validateEmail, validatePassword } from '../../../utils/validation';
 import { useNavigate } from 'react-router';
 
 export const loader = requireGuestLoader;

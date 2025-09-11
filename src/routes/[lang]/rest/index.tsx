@@ -2,7 +2,7 @@ import { Routes, Route, useParams, useSearchParams } from 'react-router';
 import RESTClient from './rest-client';
 import { Alert, Box, Typography } from '@mui/material';
 
-import { requireAuthLoader } from '../../utils/authLoaders';
+import { requireAuthLoader } from '../../../utils/authLoaders';
 
 import { type Header } from '~/types';
 import type { METHODS } from '~/constants';

@@ -1,8 +1,9 @@
 import { useLoaderData } from 'react-router';
-import { getUserFromRequest } from '../../utils/auth.server';
+import { getUserFromRequest } from '../../../utils/auth.server';
 // import Spinner from '../../components/Spinner/Spinner';
-import MainNonAuthorized from '../../components/Main/MainNonAuthorized';
-import MainAuthorized from '../../components/Main/MainAuthorized';
+import MainNonAuthorized from '../../../components/Main/MainNonAuthorized';
+import MainAuthorized from '../../../components/Main/MainAuthorized';
+import { useIntlayer } from 'react-intlayer';
 
 export function meta() {
   return [
@@ -20,9 +21,14 @@ export async function loader({ request }: { request: Request }) {
 
 export default function Main() {
   const { user } = useLoaderData();
+
+  const { myTranslatedContent } = useIntlayer('component-key');
+
   // if (loading) {
   //   return <Spinner />;
   // }
+
+  <h1>{myTranslatedContent}</h1>;
 
   if (user && user.email) {
     return <MainAuthorized email={user.email} />;

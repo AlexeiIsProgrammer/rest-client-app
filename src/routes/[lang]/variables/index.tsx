@@ -1,4 +1,4 @@
-import { requireAuthLoader } from '../../utils/authLoaders';
+import { requireAuthLoader } from '../../../utils/authLoaders';
 import { Container } from '@mui/material';
 
 export function meta() {

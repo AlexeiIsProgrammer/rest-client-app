@@ -1,11 +1,12 @@
-import { requireGuestLoader } from '../../utils/authLoaders';
+import { requireGuestLoader } from '../../../utils/authLoaders';
 import { useState } from 'react';
 import { Container, Typography } from '@mui/material';
-import Spinner from '../../components/Spinner/Spinner';
-import AuthForm from '../../components/AuthForm/AuthForm';
-import { logInWithEmailAndPassword } from '../../firebase';
-import { validateEmail } from '../../utils/validation';
-import { useNavigate, Link } from 'react-router';
+import Spinner from '../../../components/Spinner/Spinner';
+import AuthForm from '../../../components/AuthForm/AuthForm';
+import { logInWithEmailAndPassword } from '../../../firebase';
+import { validateEmail } from '../../../utils/validation';
+import { useNavigate } from 'react-router';
+import LocaleLink from '~/components/LocaleLink';
 
 export const loader = requireGuestLoader;
 
@@ -56,7 +57,7 @@ export default function SignIn() {
           buttonText="Login"
         />
         <Typography sx={{ mt: 2, textAlign: 'center' }}>
-          <Link to="/signup">Sign up</Link>
+          <LocaleLink to="/signup">Sign up</LocaleLink>
         </Typography>
       </Container>
     </>

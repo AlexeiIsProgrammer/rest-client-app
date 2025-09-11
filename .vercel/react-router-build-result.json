@@ -10,23 +10,70 @@
       }
     },
     "routeIdToServerBundleId": {
-      "routes/home": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
+      "root": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/[lang]/main/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/[lang]/signup/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/[lang]/signin/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/[lang]/rest/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/[lang]/variables/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/[lang]/history/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
     },
     "routes": {
       "root": {
         "id": "root",
         "file": "src/root.tsx",
         "path": "",
-        "config": {}
-      },
-      "routes/home": {
-        "id": "routes/home",
-        "parentId": "root",
-        "file": "src/routes/home.tsx",
-        "index": true,
         "config": {
           "runtime": "nodejs"
         }
+      },
+      "layout": {
+        "id": "layout",
+        "parentId": "root",
+        "file": "src/layout.tsx",
+        "config": {}
+      },
+      "routes/[lang]/main/index": {
+        "id": "routes/[lang]/main/index",
+        "parentId": "layout",
+        "file": "src/routes/[lang]/main/index.tsx",
+        "path": "/:lang",
+        "config": {}
+      },
+      "routes/[lang]/signup/index": {
+        "id": "routes/[lang]/signup/index",
+        "parentId": "layout",
+        "file": "src/routes/[lang]/signup/index.tsx",
+        "path": "/:lang/signup",
+        "config": {}
+      },
+      "routes/[lang]/signin/index": {
+        "id": "routes/[lang]/signin/index",
+        "parentId": "layout",
+        "file": "src/routes/[lang]/signin/index.tsx",
+        "path": "/:lang/signin",
+        "config": {}
+      },
+      "routes/[lang]/rest/index": {
+        "id": "routes/[lang]/rest/index",
+        "parentId": "layout",
+        "file": "src/routes/[lang]/rest/index.tsx",
+        "path": "/:lang/rest/*",
+        "config": {}
+      },
+      "routes/[lang]/variables/index": {
+        "id": "routes/[lang]/variables/index",
+        "parentId": "layout",
+        "file": "src/routes/[lang]/variables/index.tsx",
+        "path": "/:lang/variables",
+        "config": {}
+      },
+      "routes/[lang]/history/index": {
+        "id": "routes/[lang]/history/index",
+        "parentId": "layout",
+        "file": "src/routes/[lang]/history/index.tsx",
+        "path": "/:lang/history",
+        "config": {}
       }
     }
   },
@@ -47,11 +94,46 @@
         "file": "root.tsx",
         "path": ""
       },
-      "routes/home": {
-        "id": "routes/home",
+      "layout": {
+        "id": "layout",
         "parentId": "root",
-        "file": "routes/home.tsx",
-        "index": true
+        "file": "./layout.tsx"
+      },
+      "routes/[lang]/main/index": {
+        "id": "routes/[lang]/main/index",
+        "parentId": "layout",
+        "file": "./routes/[lang]/main/index.tsx",
+        "path": "/:lang"
+      },
+      "routes/[lang]/signup/index": {
+        "id": "routes/[lang]/signup/index",
+        "parentId": "layout",
+        "file": "routes/[lang]/signup/index.tsx",
+        "path": "/:lang/signup"
+      },
+      "routes/[lang]/signin/index": {
+        "id": "routes/[lang]/signin/index",
+        "parentId": "layout",
+        "file": "routes/[lang]/signin/index.tsx",
+        "path": "/:lang/signin"
+      },
+      "routes/[lang]/rest/index": {
+        "id": "routes/[lang]/rest/index",
+        "parentId": "layout",
+        "file": "./routes/[lang]/rest/index.tsx",
+        "path": "/:lang/rest/*"
+      },
+      "routes/[lang]/variables/index": {
+        "id": "routes/[lang]/variables/index",
+        "parentId": "layout",
+        "file": "./routes/[lang]/variables/index.tsx",
+        "path": "/:lang/variables"
+      },
+      "routes/[lang]/history/index": {
+        "id": "routes/[lang]/history/index",
+        "parentId": "layout",
+        "file": "./routes/[lang]/history/index.tsx",
+        "path": "/:lang/history"
       }
     },
     "routeDiscovery": {
@@ -68,8 +150,33 @@
         "file": "root.tsx",
         "children": [
           {
-            "file": "routes/home.tsx",
-            "index": true
+            "file": "./layout.tsx",
+            "children": [
+              {
+                "file": "./routes/[lang]/main/index.tsx",
+                "path": "/:lang"
+              },
+              {
+                "file": "routes/[lang]/signup/index.tsx",
+                "path": "/:lang/signup"
+              },
+              {
+                "file": "routes/[lang]/signin/index.tsx",
+                "path": "/:lang/signin"
+              },
+              {
+                "file": "./routes/[lang]/rest/index.tsx",
+                "path": "/:lang/rest/*"
+              },
+              {
+                "file": "./routes/[lang]/variables/index.tsx",
+                "path": "/:lang/variables"
+              },
+              {
+                "file": "./routes/[lang]/history/index.tsx",
+                "path": "/:lang/history"
+              }
+            ]
           }
         ]
       }
