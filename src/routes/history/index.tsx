@@ -14,6 +14,7 @@ interface RequestHistoryItem {
   responseSize?: number;
   error?: string | null;
   encodedPath: string;
+  id: string;
 }
 
 import {
@@ -43,7 +44,10 @@ export const loader = async ({ request }: { request: Request }) => {
   );
 
   const snapshot = await getDocs(q);
-  const history = snapshot.docs.map((doc) => doc.data());
+  const history = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 
   return { history };
 };
@@ -64,7 +68,7 @@ export default function History() {
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <List>
         {history.map((item: RequestHistoryItem) => (
-          <ListItem key={item.timestamp.seconds} divider>
+          <ListItem key={item.id} divider>
             <ListItemText
               primary={<Link to={item.encodedPath}>{item.endpoint}</Link>}
               secondary={

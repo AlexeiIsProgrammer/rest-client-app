@@ -1,5 +1,6 @@
 import { METHODS } from '~/constants';
 import type { Header } from '~/types';
+import fromBase64 from './fromBase64';
 
 type getParamsProps = {
   method?: string;
@@ -23,14 +24,15 @@ const getParams = ({
     headers.push({ name: key, value: decodeURIComponent(value) });
   }
 
-  const url = encodedUrl ? atob(encodedUrl) : '';
+  const url = encodedUrl ? fromBase64(encodedUrl) : '';
+
   let body = '';
 
   if (encodedBody) {
     try {
-      body = JSON.parse(atob(encodedBody));
+      body = JSON.parse(fromBase64(encodedBody));
     } catch {
-      body = atob(encodedBody);
+      body = fromBase64(encodedBody);
     }
   }
 

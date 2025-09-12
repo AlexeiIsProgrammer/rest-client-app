@@ -31,7 +31,11 @@ export async function loader({ params, request }: RouteType.LoaderArgs) {
     searchParams,
   });
 
-  if (!url) return null;
+  const refererUrl = request.headers.get('Referer');
+
+  const prevPath = refererUrl ? new URL(refererUrl).pathname : null;
+
+  if (!url || !prevPath?.includes('/rest')) return null;
 
   return await sendServerRequest(initialMethod, url, body, headers);
 }
