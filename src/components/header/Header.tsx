@@ -14,8 +14,11 @@ import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import RSSLogo from '../../assets/images/rss-logo.svg';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { useIntlayer } from 'react-intlayer';
 
 function Header(): React.ReactElement {
+  const content = useIntlayer('page');
+
   const navigate = useNavigate();
   const isScrolled = useScrollTrigger({
     disableHysteresis: true,
@@ -65,10 +68,10 @@ function Header(): React.ReactElement {
 
         <Box sx={{ '& button': { m: 1 } }}>
           <Button startIcon={<Login />} variant="outlined" size="medium">
-            Sign In
+            {content.title}
           </Button>
           <Button startIcon={<PersonAdd />} variant="outlined" size="medium">
-            Sign Up
+            {content.description}
           </Button>
           <Button
             startIcon={<Logout />}

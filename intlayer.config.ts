@@ -6,7 +6,8 @@ const config: IntlayerConfig = {
     locales: [Locales.ENGLISH, Locales.RUSSIAN],
   },
   middleware: {
-    prefixDefault: true,
+    prefixDefault: false,
+    noPrefix: true,
   },
 };
 

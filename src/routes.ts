@@ -7,12 +7,11 @@ import {
 
 export default [
   layout('./layout.tsx', [
-    index('./routes/index.tsx'),
-    route('/:lang', './routes/[lang]/main/index.tsx'),
-    route('/:lang/signup', 'routes/[lang]/signup/index.tsx'),
-    route('/:lang/signin', 'routes/[lang]/signin/index.tsx'),
-    route('/:lang/rest/*', './routes/[lang]/rest/index.tsx'),
-    route('/:lang/variables', './routes/[lang]/variables/index.tsx'),
-    route('/:lang/history', './routes/[lang]/history/index.tsx'),
+    index('./routes/main/index.tsx'),
+    route('signup', 'routes/signup/index.tsx'),
+    route('signin', 'routes/signin/index.tsx'),
+    route('rest/*', './routes/rest/index.tsx'),
+    route('variables', './routes/variables/index.tsx'),
+    route('history', './routes/history/index.tsx'),
   ]),
 ] satisfies RouteConfig;

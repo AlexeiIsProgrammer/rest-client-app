@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { getLocaleName, getLocalizedUrl } from 'intlayer';
+import { getLocaleName } from 'intlayer';
 import { useLocale } from 'react-intlayer';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -11,13 +11,8 @@ const LanguageSwitcher = () => {
   const handleLocaleChange = () => {
     const newLocale = availableLocales.filter((loc) => loc !== locale)[0];
 
-    const localizedUrl = getLocalizedUrl(
-      location.pathname + location.search,
-      newLocale
-    );
-
     setLocale(newLocale);
-    navigate(localizedUrl);
+    navigate(location.pathname + location.search);
   };
 
   return (

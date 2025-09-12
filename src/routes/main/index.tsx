@@ -20,9 +20,6 @@ export async function loader({ request }: { request: Request }) {
 
 export default function Main() {
   const { user } = useLoaderData();
-  // if (loading) {
-  //   return <Spinner />;
-  // }
 
   if (user && user.email) {
     return <MainAuthorized email={user.email} />;
