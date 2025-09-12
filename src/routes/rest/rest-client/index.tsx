@@ -25,6 +25,7 @@ import validateUrl from '~/utils/validateUrl';
 import saveHistory from '~/utils/saveHistory';
 
 import { auth } from '~/firebase';
+import toBase64 from '~/utils/toBase64';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -50,8 +51,10 @@ const RESTClient = ({
   const [error, setError] = useState('');
 
   const updateURL = () => {
-    const encodedUrl = btoa(url);
-    const encodedBody = requestBody ? btoa(JSON.stringify(requestBody)) : '';
+    const encodedUrl = toBase64(url);
+    const encodedBody = requestBody
+      ? toBase64(JSON.stringify(requestBody))
+      : '';
 
     const queryParams = new URLSearchParams();
     headers.forEach(({ name, value }) => {

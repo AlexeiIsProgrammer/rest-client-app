@@ -64,7 +64,7 @@ export default function History() {
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <List>
         {history.map((item: RequestHistoryItem) => (
-          <ListItem key={item.timestamp.seconds} divider>
+          <ListItem key={item.uid} divider>
             <ListItemText
               primary={<Link to={item.encodedPath}>{item.endpoint}</Link>}
               secondary={
