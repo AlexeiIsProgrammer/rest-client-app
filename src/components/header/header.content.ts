@@ -1,23 +1,27 @@
 import { t, type Dictionary } from 'intlayer';
 
 const pageContent = {
-  key: 'page',
+  key: 'header',
   content: {
-    title: t({
-      en: 'Welcome to React Router v7 + Intlayer',
-      ru: "React Router v7 + Intlayer'a Hoş Geldiniz",
+    ['sign-in']: t({
+      en: 'Sign in',
+      ru: 'Войти',
     }),
-    description: t({
-      en: 'Build multilingual applications with ease using React Router v7 and Intlayer.',
-      ru: 'React Router v7 и Intlayer позволяют легко создавать многоязычные приложения.',
+    ['sign-up']: t({
+      en: 'Sign up',
+      ru: 'Зарегистрироваться',
     }),
-    aboutLink: t({
-      en: 'Узнать о нас',
-      ru: 'Hakkımızda Öğrenin',
+    logout: t({
+      en: 'Logout',
+      ru: 'Выйти',
     }),
-    homeLink: t({
-      en: 'Главная',
-      ru: 'Ana Sayfa',
+    home: t({
+      en: 'Go to home',
+      ru: 'На главную',
+    }),
+    logo: t({
+      en: 'Logo',
+      ru: 'Логотип',
     }),
   },
 } satisfies Dictionary;

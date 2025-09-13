@@ -17,7 +17,7 @@ import LanguageSwitcher from '../LanguageSwitcher';
 import { useIntlayer } from 'react-intlayer';
 
 function Header(): React.ReactElement {
-  const content = useIntlayer('page');
+  const content = useIntlayer('header');
 
   const navigate = useNavigate();
   const isScrolled = useScrollTrigger({
@@ -51,13 +51,13 @@ function Header(): React.ReactElement {
         <ButtonBase
           component={RouterLink}
           to="/"
-          aria-label="Go to home"
+          aria-label={content.home?.value}
           sx={{ p: 0.5, borderRadius: 1 }}
         >
           <Box
             component="img"
             src={RSSLogo}
-            alt="Logo"
+            alt={content.logo?.value}
             sx={{ height: 32, display: 'block' }}
           />
         </ButtonBase>
@@ -68,10 +68,10 @@ function Header(): React.ReactElement {
 
         <Box sx={{ '& button': { m: 1 } }}>
           <Button startIcon={<Login />} variant="outlined" size="medium">
-            {content.title}
+            {content['sign-in']}
           </Button>
           <Button startIcon={<PersonAdd />} variant="outlined" size="medium">
-            {content.description}
+            {content['sign-up']}
           </Button>
           <Button
             startIcon={<Logout />}
@@ -79,7 +79,7 @@ function Header(): React.ReactElement {
             size="medium"
             onClick={handleLogout}
           >
-            Logout
+            {content.logout}
           </Button>
         </Box>
       </Toolbar>
