@@ -1,4 +1,5 @@
 import { TextField, Button, Typography } from '@mui/material';
+import { useIntlayer } from 'react-intlayer';
 
 type Props = {
   email: string;
@@ -19,12 +20,14 @@ function AuthForm({
   error,
   buttonText,
 }: Props) {
+  const content = useIntlayer('auth-form');
+
   return (
     <form onSubmit={handleSubmit}>
       <TextField
         fullWidth
         margin="normal"
-        label="Email"
+        label={content.email}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
@@ -37,7 +40,7 @@ function AuthForm({
         fullWidth
         margin="normal"
         type="password"
-        label="Password"
+        label={content.password}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
