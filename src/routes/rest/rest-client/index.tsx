@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Container,
   Paper,
@@ -11,19 +11,20 @@ import {
   styled,
 } from '@mui/material';
 import type { RESTClientProps } from './types';
+import type { User } from 'firebase/auth';
 import MethodSelector from '../method-selector';
-import { useRESTClient } from '~/hooks/useRESTClient';
 import HeadersEditor from '../headers-editor';
 import RequestBodyEditor from '../request-body-editor';
 import EndpointInput from '../endpoint-input';
 import GeneratedCode from '../generated-code';
 import ResponseSection from '../response-section';
-import { type Header } from '~/types';
+import { type Header, type RESTResponse } from '~/types';
 import { METHODS } from '~/constants';
 import { useNavigate } from 'react-router';
 import validateUrl from '~/utils/validateUrl';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '~/firebase';
+import saveHistory from '~/utils/saveHistory';
+import toBase64 from '~/utils/toBase64';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -35,25 +36,24 @@ const RESTClient = ({
   initialUrl = '',
   initialBody = '',
   initialHeaders = [],
+  response,
 }: RESTClientProps) => {
   const [method, setMethod] = useState<METHODS>(initialMethod);
   const [url, setUrl] = useState<string>(initialUrl);
   const [requestBody, setRequestBody] = useState<string>(initialBody);
   const [headers, setHeaders] = useState<Header[]>(initialHeaders);
   const [activeTab, setActiveTab] = useState(0);
+  const [path, setPath] = useState<string>('');
 
-  const [user] = useAuthState(auth);
-  const userId = user?.uid || user?.email || '';
-  const { response, loading, sendRequest } = useRESTClient(userId);
   const navigate = useNavigate();
 
-  const error = useMemo(() => validateUrl(url), [url]);
+  const [error, setError] = useState('');
 
   const updateURL = () => {
-    if (error) return;
-
-    const encodedUrl = btoa(url);
-    const encodedBody = requestBody ? btoa(JSON.stringify(requestBody)) : '';
+    const encodedUrl = toBase64(url);
+    const encodedBody = requestBody
+      ? toBase64(JSON.stringify(requestBody))
+      : '';
 
     const queryParams = new URLSearchParams();
     headers.forEach(({ name, value }) => {
@@ -66,14 +66,38 @@ const RESTClient = ({
     const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryString ? `?${queryString}` : ''}`;
 
     navigate(newPath, { replace: true });
+    setPath(newPath);
   };
 
   const handleSendRequest = async () => {
-    if (error) return;
+    const error = validateUrl(url);
+    if (error) {
+      setError(error);
+      return;
+    }
 
     updateURL();
-    await sendRequest(method, url, requestBody, headers);
   };
+
+  const saveResponseHistory = useCallback(
+    (response: RESTResponse, user: User) => {
+      saveHistory({ user, url, method, response, requestBody, path });
+    },
+    [url, method, requestBody, path]
+  );
+
+  useEffect(() => {
+    if (!url) return;
+
+    setError(validateUrl(url));
+  }, [url]);
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user && response) {
+      saveResponseHistory(response, user);
+    }
+  }, [response, saveResponseHistory]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 3 }}>
@@ -96,10 +120,10 @@ const RESTClient = ({
               color="primary"
               fullWidth
               onClick={handleSendRequest}
-              disabled={loading || !!error}
+              disabled={!!error}
               size="large"
             >
-              {loading ? 'Sending...' : 'Send'}
+              Send
             </Button>
           </Grid>
         </Grid>

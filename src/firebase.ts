@@ -22,7 +22,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const logInWithEmailAndPassword = async (email: string, password: string) => {
-  await signInWithEmailAndPassword(auth, email, password);
+  return signInWithEmailAndPassword(auth, email, password);
 };
 
 const registerWithEmailAndPassword = async (
@@ -41,6 +41,7 @@ const registerWithEmailAndPassword = async (
 
 const logout = () => {
   signOut(auth);
+  document.cookie = 'session=; path=/; max-age=0';
 };
 
 export {

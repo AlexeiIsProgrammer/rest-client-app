@@ -10,10 +10,11 @@ export default [
     index('./routes/main/index.tsx'),
     route('signup', 'routes/signup/index.tsx'),
     route('signin', 'routes/signin/index.tsx'),
-    layout('./routes/PrivateRoute.tsx', [
-      route('rest/*', './routes/rest/index.tsx'),
-      route('variables', './routes/variables/Variables.lazy.tsx'),
-      route('history', './routes/history/index.tsx'),
-    ]),
+    route(
+      'rest/:method?/:encodedUrl?/:encodedBody?',
+      './routes/rest/index.tsx'
+    ),
+    route('variables', './routes/variables/Variables.lazy.tsx'),
+    route('history', './routes/history/index.tsx'),
   ]),
 ] satisfies RouteConfig;

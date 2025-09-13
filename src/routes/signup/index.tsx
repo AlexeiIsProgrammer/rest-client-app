@@ -1,14 +1,15 @@
+import { requireGuestLoader } from '../../utils/authLoaders';
 import { useState } from 'react';
 import { Container, Typography } from '@mui/material';
 import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
-import { registerWithEmailAndPassword, auth } from '../../firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { registerWithEmailAndPassword } from '../../firebase';
 import { validateEmail, validatePassword } from '../../utils/validation';
-import { useNavigate, Navigate } from 'react-router';
+import { useNavigate } from 'react-router';
+
+export const loader = requireGuestLoader;
 
 export default function SignUp() {
-  const [user, loading] = useAuthState(auth);
   const [isFetching, setIsFetching] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +28,9 @@ export default function SignUp() {
     }
     try {
       setIsFetching(true);
-      await registerWithEmailAndPassword(email, password);
+      const user = await registerWithEmailAndPassword(email, password);
+      const idToken = await user.getIdToken();
+      document.cookie = `session=${idToken}; path=/; max-age=3600`;
       navigate('/');
     } catch (err) {
       if (err instanceof Error) {
@@ -38,14 +41,6 @@ export default function SignUp() {
     } finally {
       setIsFetching(false);
     }
-  }
-
-  if (loading) {
-    return <Spinner />;
-  }
-
-  if (user) {
-    return <Navigate to="/" replace />;
   }
 
   return (
