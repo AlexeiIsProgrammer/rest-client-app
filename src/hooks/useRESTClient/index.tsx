@@ -55,19 +55,23 @@ export const useRESTClient = () => {
         responseData = await res.text();
       }
 
-      setResponse({
+      const restResponse = {
         status: res.status,
         statusText: res.statusText,
         headers: Object.fromEntries(res.headers.entries()),
         data: responseData,
         time: startTime,
         duration: responseTime,
-      });
+      };
+      setResponse(restResponse);
+      return restResponse;
     } catch (error) {
-      setResponse({
+      const errorResponse = {
         error: (error as Error).message,
         time: Date.now(),
-      });
+      };
+      setResponse(errorResponse);
+      return errorResponse;
     } finally {
       setLoading(false);
     }

@@ -1,11 +1,12 @@
-import { Routes, Route, useParams, useSearchParams } from 'react-router';
+import { useParams, useSearchParams, useLoaderData } from 'react-router';
 import RESTClient from './rest-client';
 import { Alert, Box, Typography } from '@mui/material';
 
-import { requireAuthLoader } from '../../utils/authLoaders';
-
-import { type Header } from '~/types';
-import type { METHODS } from '~/constants';
+import { sendServerRequest } from '~/hooks/useRESTClient/sendServerRequest';
+import type { Route as RouteType } from './+types';
+import getParams from '~/utils/getUrlParams';
+import { getUserFromRequest } from '~/utils/auth.server';
+import { redirect } from 'react-router';
 
 export function meta() {
   return [
@@ -14,46 +15,52 @@ export function meta() {
   ];
 }
 
-export const loader = requireAuthLoader;
+export async function loader({ params, request }: RouteType.LoaderArgs) {
+  const user = await getUserFromRequest(request);
+  if (!user) {
+    return redirect('/signin');
+  }
 
-const RESTClientPage: React.FC = () => {
-  return (
-    <Routes>
-      <Route
-        path="/:method?/:encodedUrl?/:encodedBody?"
-        element={<RESTClientWrapper />}
-      />
-    </Routes>
-  );
-};
+  const { searchParams } = new URL(request.url);
+  const { method, encodedUrl, encodedBody } = params;
+
+  const { url, body, initialMethod, headers } = getParams({
+    method,
+    encodedBody,
+    encodedUrl,
+    searchParams,
+  });
+
+  const refererUrl = request.headers.get('Referer');
+
+  const prevPath = refererUrl ? new URL(refererUrl).pathname : null;
+
+  if (!url || !prevPath?.includes('/rest')) return null;
+
+  return await sendServerRequest(initialMethod, url, body, headers);
+}
 
 const RESTClientWrapper = () => {
+  const response = useLoaderData<typeof loader>();
+
   const { method, encodedUrl, encodedBody } = useParams();
   const [searchParams] = useSearchParams();
 
   try {
-    const headers: Header[] = [];
-    for (const [key, value] of searchParams.entries()) {
-      headers.push({ name: key, value: decodeURIComponent(value) });
-    }
-
-    const url = encodedUrl ? atob(encodedUrl) : '';
-    let body = '';
-
-    if (encodedBody) {
-      try {
-        body = JSON.parse(atob(encodedBody));
-      } catch {
-        body = atob(encodedBody);
-      }
-    }
+    const { url, body, initialMethod, headers } = getParams({
+      method,
+      encodedBody,
+      encodedUrl,
+      searchParams,
+    });
 
     return (
       <RESTClient
-        initialMethod={(method?.toUpperCase() as METHODS) || 'GET'}
+        initialMethod={initialMethod}
         initialUrl={url}
         initialBody={body}
         initialHeaders={headers}
+        response={response}
       />
     );
   } catch (error) {
@@ -71,4 +78,4 @@ const RESTClientWrapper = () => {
   }
 };
 
-export default RESTClientPage;
+export default RESTClientWrapper;

@@ -1,5 +1,29 @@
-import { requireAuthLoader } from '../../utils/authLoaders';
-import { Container } from '@mui/material';
+import { useLoaderData, redirect, Link } from 'react-router';
+import { getDocs, orderBy, query, where, collection } from 'firebase/firestore';
+import { db } from '~/firebase';
+import { getUserFromRequest } from '~/utils/auth.server';
+
+interface RequestHistoryItem {
+  uid: string;
+  endpoint: string;
+  method: string;
+  statusCode?: number;
+  duration?: number;
+  timestamp: { seconds: number; nanoseconds: number };
+  requestSize?: number;
+  responseSize?: number;
+  error?: string | null;
+  encodedPath: string;
+  id: string;
+}
+
+import {
+  Container,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 
 export function meta() {
   return [
@@ -8,8 +32,54 @@ export function meta() {
   ];
 }
 
-export const loader = requireAuthLoader;
+export const loader = async ({ request }: { request: Request }) => {
+  const user = await getUserFromRequest(request);
+  if (!user) {
+    return redirect('/signin');
+  }
+  const q = query(
+    collection(db, 'requests'),
+    where('uid', '==', user.uid),
+    orderBy('timestamp', 'desc')
+  );
+
+  const snapshot = await getDocs(q);
+  const history = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  return { history };
+};
 
 export default function History() {
-  return <Container maxWidth="sm">History</Container>;
+  const { history } = useLoaderData();
+  if (!history.length) {
+    return (
+      <Container maxWidth="sm">
+        <Typography sx={{ mt: 4, textAlign: 'center' }}>
+          You have not executed any requests yet. It is empty here.
+        </Typography>
+      </Container>
+    );
+  }
+
+  return (
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
+      <List>
+        {history.map((item: RequestHistoryItem) => (
+          <ListItem key={item.id} divider>
+            <ListItemText
+              primary={<Link to={item.encodedPath}>{item.endpoint}</Link>}
+              secondary={
+                <Typography sx={{ color: 'white' }}>
+                  {`Status: ${item.statusCode ?? 'N/A'}, Duration: ${item.duration ?? 'N/A'}`}
+                </Typography>
+              }
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Container>
+  );
 }
