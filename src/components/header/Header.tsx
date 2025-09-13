@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { logout, auth } from '../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   AppBar,
   Toolbar,
@@ -16,12 +16,30 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import students from '../../assets/images/mentor-with-his-students.svg';
 
 function Header(): React.ReactElement {
+  const [user, setUser] = useState<{
+    uid: string;
+    email: string | null;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const isScrolled = useScrollTrigger({
     disableHysteresis: true,
     threshold: 10,
   });
 
-  const [user] = useAuthState(auth);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  function handleLogout() {
+    logout();
+    navigate('/');
+  }
 
   return (
     <AppBar
@@ -62,12 +80,14 @@ function Header(): React.ReactElement {
         </Box>
 
         <Box sx={{ '& > *': { m: 1 } }}>
-          {user && user.email ? (
+          {!loading && user && user.email ? (
             <Button
               startIcon={<Logout />}
               variant="outlined"
               size="medium"
-              onClick={() => logout()}
+              onClick={() => {
+                handleLogout();
+              }}
             >
               Logout
             </Button>

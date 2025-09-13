@@ -25,6 +25,7 @@ import validateUrl from '~/utils/validateUrl';
 import { auth } from '~/firebase';
 import saveHistory from '~/utils/saveHistory';
 import toBase64 from '~/utils/toBase64';
+import { useVariablesContext } from '~/context/VariablesContext';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -46,6 +47,7 @@ const RESTClient = ({
   const [path, setPath] = useState<string>('');
 
   const navigate = useNavigate();
+  const { variables } = useVariablesContext();
 
   const [error, setError] = useState('');
 
@@ -54,6 +56,7 @@ const RESTClient = ({
     const encodedBody = requestBody
       ? toBase64(JSON.stringify(requestBody))
       : '';
+    const encodedVariables = toBase64(JSON.stringify(variables));
 
     const queryParams = new URLSearchParams();
     headers.forEach(({ name, value }) => {
@@ -63,14 +66,14 @@ const RESTClient = ({
     });
 
     const queryString = queryParams.toString();
-    const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryString ? `?${queryString}` : ''}`;
+    const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${encodedVariables ? `/${encodedVariables}` : ''}${queryString ? `?${queryString}` : ''}`;
 
     navigate(newPath, { replace: true });
     setPath(newPath);
   };
 
   const handleSendRequest = async () => {
-    const error = validateUrl(url);
+    const error = validateUrl(url, variables);
     if (error) {
       setError(error);
       return;
@@ -89,8 +92,8 @@ const RESTClient = ({
   useEffect(() => {
     if (!url) return;
 
-    setError(validateUrl(url));
-  }, [url]);
+    setError(validateUrl(url, variables));
+  }, [url, variables]);
 
   useEffect(() => {
     const user = auth.currentUser;

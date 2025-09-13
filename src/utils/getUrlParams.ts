@@ -6,6 +6,7 @@ type getParamsProps = {
   method?: string;
   encodedUrl?: string;
   encodedBody?: string;
+  encodedVariables?: string;
   searchParams: URLSearchParams;
 };
 
@@ -13,6 +14,7 @@ const getParams = ({
   method,
   encodedUrl,
   encodedBody,
+  encodedVariables,
   searchParams,
 }: getParamsProps) => {
   const initialMethod = method
@@ -36,7 +38,16 @@ const getParams = ({
     }
   }
 
-  return { initialMethod, url, body, headers };
+  let variables = [];
+  if (encodedVariables) {
+    try {
+      variables = JSON.parse(fromBase64(encodedVariables));
+    } catch {
+      variables = [];
+    }
+  }
+
+  return { initialMethod, url, body, headers, variables };
 };
 
 export default getParams;

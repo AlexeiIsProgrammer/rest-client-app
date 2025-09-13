@@ -15,6 +15,10 @@ export const useVariables = (userId: string) => {
       const loadedVariables = loadVariablesFromStorage(userId);
       setVariables(loadedVariables);
       setLoading(false);
+    } else {
+      console.log('useVariables - No userId, setting empty variables');
+      setVariables([]);
+      setLoading(false);
     }
   }, [userId]);
 
@@ -31,7 +35,10 @@ export const useVariables = (userId: string) => {
       value: value.trim(),
     };
 
-    setVariables((prev) => [...prev, newVariable]);
+    setVariables((prev) => {
+      const updated = [...prev, newVariable];
+      return updated;
+    });
     return newVariable;
   }, []);
 
@@ -45,7 +52,7 @@ export const useVariables = (userId: string) => {
         )
       );
     },
-    []
+    [setVariables]
   );
 
   const deleteVariable = useCallback((id: string) => {

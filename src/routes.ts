@@ -11,7 +11,7 @@ export default [
     route('signup', 'routes/signup/index.tsx'),
     route('signin', 'routes/signin/index.tsx'),
     route(
-      'rest/:method?/:encodedUrl?/:encodedBody?',
+      'rest/:method?/:encodedUrl?/:encodedBody?/:encodedVariables?',
       './routes/rest/index.tsx'
     ),
     route('variables', './routes/variables/Variables.lazy.tsx'),

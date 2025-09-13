@@ -2,19 +2,64 @@
 
 import { METHODS } from '~/constants';
 import type { Header } from '~/types';
+import { substituteVariables } from '~/utils/variableStorage';
+import type { Variable } from '~/routes/variables/types';
+
+const getHttpErrorMessage = (status: number, statusText: string): string => {
+  switch (status) {
+    case 400:
+      return 'Bad Request - The server could not understand the request. Please check your request format.';
+    case 401:
+      return 'Unauthorized - Authentication required. Please check your credentials.';
+    case 403:
+      return 'Forbidden - You do not have permission to access this resource.';
+    case 404:
+      return 'Not Found - The requested resource was not found. Please check your URL.';
+    case 405:
+      return 'Method Not Allowed - The HTTP method is not supported for this endpoint.';
+    case 408:
+      return 'Request Timeout - The server timed out waiting for the request.';
+    case 429:
+      return 'Too Many Requests - Rate limit exceeded. Please try again later.';
+    case 500:
+      return 'Internal Server Error - The server encountered an unexpected error.';
+    case 502:
+      return 'Bad Gateway - The server received an invalid response from upstream.';
+    case 503:
+      return 'Service Unavailable - The server is temporarily unavailable.';
+    case 504:
+      return 'Gateway Timeout - The server did not receive a timely response.';
+    default:
+      return statusText || 'Unknown error occurred';
+  }
+};
 
 export const sendServerRequest = async (
   method: METHODS,
   url: string,
-  body: string,
-  headers: Header[]
+  body: string | unknown,
+  headers: Header[],
+  variables: Variable[] = []
 ) => {
   try {
+    const processedUrl = substituteVariables(url, variables);
+
+    let bodyString = body;
+    if (typeof body === 'object' && body !== null) {
+      bodyString = JSON.stringify(body);
+    }
+    const processedBody = substituteVariables(bodyString, variables);
+
+    const processedHeaders = headers.map((header) => ({
+      name: substituteVariables(header.name, variables),
+      value: substituteVariables(header.value, variables),
+    }));
+
     const options: RequestInit = {
       method,
       headers: {
         'Content-Type': 'application/json',
-        ...headers.reduce(
+        ...processedHeaders.reduce(
           (acc, curr) => ({ ...acc, [curr.name]: curr.value }),
           {}
         ),
@@ -22,15 +67,15 @@ export const sendServerRequest = async (
     };
 
     if (
-      body &&
+      processedBody &&
       [METHODS.POST, METHODS.PUT, METHODS.PATCH, METHODS.DELETE].includes(
         method
       )
     ) {
       try {
-        options.body = JSON.stringify(JSON.parse(body));
+        options.body = JSON.stringify(JSON.parse(processedBody));
       } catch {
-        options.body = body;
+        options.body = processedBody;
         if (options.headers) {
           (options.headers as Record<string, string>)['Content-Type'] =
             'text/plain';
@@ -38,8 +83,22 @@ export const sendServerRequest = async (
       }
     }
 
+    if (/\{\{([^}]+)\}\}/.test(processedUrl)) {
+      throw new Error(
+        `Failed to substitute all variables in URL: ${processedUrl}`
+      );
+    }
+
+    try {
+      new URL(processedUrl);
+    } catch {
+      throw new Error(
+        `Invalid URL after variable substitution: ${processedUrl}`
+      );
+    }
+
     const startTime = Date.now();
-    const res = await fetch(url, options);
+    const res = await fetch(processedUrl, options);
     const responseTime = Date.now() - startTime;
 
     let responseData;
@@ -51,6 +110,11 @@ export const sendServerRequest = async (
       responseData = await res.text();
     }
 
+    if (!res.ok) {
+      const errorMessage = getHttpErrorMessage(res.status, res.statusText);
+      throw new Error(`HTTP ${res.status}: ${errorMessage}`);
+    }
+
     return {
       status: res.status,
       statusText: res.statusText,
@@ -60,6 +124,44 @@ export const sendServerRequest = async (
       duration: responseTime,
     };
   } catch (error) {
-    throw new Error((error as Error).message);
+    console.error('sendServerRequest - Error details:', error);
+
+    let errorMessage = 'Unknown error occurred';
+
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      errorMessage =
+        'Network error: Unable to connect to the server. Please check your internet connection and try again.';
+    } else if (
+      error instanceof Error &&
+      error.message.includes('Invalid URL')
+    ) {
+      errorMessage =
+        'Invalid URL: The URL format is incorrect. Please check your endpoint URL.';
+    } else if (
+      error instanceof Error &&
+      error.message.includes('Failed to substitute')
+    ) {
+      errorMessage = `Variable substitution failed: ${error.message}`;
+    } else if (
+      error instanceof Error &&
+      error.message.includes('Failed to parse URL')
+    ) {
+      errorMessage =
+        'URL parsing failed: The URL contains invalid characters or format.';
+    } else if (error instanceof Error && error.message.includes('HTTP')) {
+      errorMessage = error.message;
+    } else {
+      errorMessage = `Request failed: ${(error as Error).message}`;
+    }
+
+    return {
+      status: 0,
+      statusText: 'Error',
+      headers: {},
+      data: undefined,
+      time: Date.now(),
+      duration: 0,
+      error: errorMessage,
+    };
   }
 };
