@@ -8,10 +8,7 @@ export default defineConfig({
     !process.env.VITEST && reactRouter(),
     tsconfigPaths(),
     intlayerPlugin(),
-    intLayerMiddlewarePlugin({
-      matcher:
-        /^\/(?!__manifest|manifest\.json|favicon\.ico|robots\.txt|public\/|.*\.\w+$).*/,
-    }),
+    intLayerMiddlewarePlugin(),
   ],
   test: {
     environment: 'jsdom',
@@ -21,6 +18,7 @@ export default defineConfig({
     coverage: {
       include: ['src/**/*.{js,jsx,ts,tsx}'],
       exclude: [
+        'src/**/*.content.{js,jsx,ts,tsx}',
         'src/**/*.test.{js,jsx,ts,tsx}',
         'src/**/*.spec.{js,jsx,ts,tsx}',
         'src/index.{js,jsx,ts,tsx}',
