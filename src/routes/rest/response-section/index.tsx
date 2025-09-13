@@ -19,7 +19,7 @@ import Cancel from '@mui/icons-material/Cancel';
 import type { ResponseSectionProps } from './types';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import atomDark from 'react-syntax-highlighter/dist/esm/styles/prism/atom-dark';
+import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
 
 const ResponseSection = ({ response }: ResponseSectionProps) => {
   const [activeTab, setActiveTab] = useState(0);
