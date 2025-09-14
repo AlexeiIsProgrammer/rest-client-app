@@ -45,8 +45,6 @@ const getParams = ({
     } catch {
       variables = [];
     }
-  } else {
-    console.log('getParams - no encodedVariables provided');
   }
 
   return { initialMethod, url, body, headers, variables };

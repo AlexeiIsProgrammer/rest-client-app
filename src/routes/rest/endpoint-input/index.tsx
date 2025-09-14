@@ -38,6 +38,12 @@ const EndpointInput = ({ url, setUrl }: EndpointInputProps) => {
         '& .MuiOutlinedInput-root': {
           paddingRight: 0,
         },
+        width: '100%',
+        minWidth: '600px',
+        '& .MuiInputBase-input': {
+          fontSize: '16px',
+          padding: '16px 14px',
+        },
       }}
     />
   );
