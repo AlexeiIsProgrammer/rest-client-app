@@ -5,10 +5,6 @@ const config: IntlayerConfig = {
     defaultLocale: Locales.ENGLISH,
     locales: [Locales.ENGLISH, Locales.RUSSIAN],
   },
-  middleware: {
-    prefixDefault: false,
-    noPrefix: true,
-  },
 };
 
 export default config;

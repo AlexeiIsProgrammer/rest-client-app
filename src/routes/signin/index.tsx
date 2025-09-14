@@ -5,7 +5,8 @@ import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
 import { logInWithEmailAndPassword } from '../../firebase';
 import { validateEmail } from '../../utils/validation';
-import { useNavigate, Link } from 'react-router';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
+import LocalizedLink from '~/components/LocalizedLink';
 
 export const loader = requireGuestLoader;
 
@@ -14,7 +15,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -56,7 +57,7 @@ export default function SignIn() {
           buttonText="Login"
         />
         <Typography sx={{ mt: 2, textAlign: 'center' }}>
-          <Link to="/signup">Sign up</Link>
+          <LocalizedLink to="/signup">Sign up</LocalizedLink>
         </Typography>
       </Container>
     </>

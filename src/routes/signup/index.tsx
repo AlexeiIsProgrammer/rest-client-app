@@ -5,7 +5,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
 import { registerWithEmailAndPassword } from '../../firebase';
 import { validateEmail, validatePassword } from '../../utils/validation';
-import { useNavigate } from 'react-router';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
 
 export const loader = requireGuestLoader;
 
@@ -14,7 +14,7 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

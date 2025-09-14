@@ -1,6 +1,6 @@
 import { Container, Stack, Typography, Button } from '@mui/material';
 import { useIntlayer } from 'react-intlayer';
-import { Link } from 'react-router';
+import LocalizedLink from '../LocalizedLink';
 
 function MainNonAuthorized() {
   const content = useIntlayer('main');
@@ -13,10 +13,10 @@ function MainNonAuthorized() {
         </Typography>
 
         <Stack direction="row" spacing={5}>
-          <Button component={Link} to="/signin" variant="contained">
+          <Button component={LocalizedLink} to="/signin" variant="contained">
             {content['sign-in']}
           </Button>
-          <Button component={Link} to="/signup" variant="contained">
+          <Button component={LocalizedLink} to="/signup" variant="contained">
             {content['sign-up']}
           </Button>
         </Stack>

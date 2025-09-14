@@ -1,6 +1,6 @@
 import { Container, Stack, Typography, Button } from '@mui/material';
 import { useIntlayer } from 'react-intlayer';
-import { Link } from 'react-router';
+import LocalizedLink from '../LocalizedLink';
 
 type Props = {
   email: string;
@@ -17,13 +17,13 @@ function MainAuthorized({ email }: Props) {
         </Typography>
 
         <Stack direction="row" spacing={5}>
-          <Button component={Link} to="/rest" variant="contained">
+          <Button component={LocalizedLink} to="/rest" variant="contained">
             {content.rest}
           </Button>
-          <Button component={Link} to="/history" variant="contained">
+          <Button component={LocalizedLink} to="/history" variant="contained">
             {content.history}
           </Button>
-          <Button component={Link} to="/variables" variant="contained">
+          <Button component={LocalizedLink} to="/variables" variant="contained">
             {content.variables}
           </Button>
         </Stack>

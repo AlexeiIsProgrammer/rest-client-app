@@ -1,4 +1,4 @@
-import { useLoaderData, redirect, Link } from 'react-router';
+import { useLoaderData, redirect } from 'react-router';
 import { getDocs, orderBy, query, where, collection } from 'firebase/firestore';
 import { db } from '~/firebase';
 import { getUserFromRequest } from '~/utils/auth.server';
@@ -24,6 +24,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+import LocalizedLink from '~/components/LocalizedLink';
 
 export function meta() {
   return [
@@ -70,7 +71,11 @@ export default function History() {
         {history.map((item: RequestHistoryItem) => (
           <ListItem key={item.id} divider>
             <ListItemText
-              primary={<Link to={item.encodedPath}>{item.endpoint}</Link>}
+              primary={
+                <LocalizedLink to={item.encodedPath}>
+                  {item.endpoint}
+                </LocalizedLink>
+              }
               secondary={
                 <Typography sx={{ color: 'white' }}>
                   {`Status: ${item.statusCode ?? 'N/A'}, Duration: ${item.duration ?? 'N/A'}`}

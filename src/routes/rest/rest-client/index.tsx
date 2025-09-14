@@ -20,13 +20,13 @@ import GeneratedCode from '../generated-code';
 import ResponseSection from '../response-section';
 import { type Header, type RESTResponse } from '~/types';
 import { METHODS } from '~/constants';
-import { useNavigate } from 'react-router';
 import validateUrl from '~/utils/validateUrl';
 import saveHistory from '~/utils/saveHistory';
 
 import { auth } from '~/firebase';
 import toBase64 from '~/utils/toBase64';
 import { useIntlayer } from 'react-intlayer';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -49,7 +49,7 @@ const RESTClient = ({
   const [activeTab, setActiveTab] = useState(0);
   const [path, setPath] = useState<string>('');
 
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const [error, setError] = useState('');
 

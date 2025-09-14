@@ -1,20 +1,25 @@
 import { Button } from '@mui/material';
-import { getLocaleName } from 'intlayer';
+import { getLocaleName, getLocalizedUrl, Locales } from 'intlayer';
 import { useIntlayer, useLocale } from 'react-intlayer';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
 const LanguageSwitcher = () => {
   const { name } = useIntlayer('language-switcher');
 
-  const { locale, availableLocales, setLocale } = useLocale();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { pathname, search } = useLocation();
+
+  const { locale, setLocale } = useLocale({
+    onLocaleChange: (newLocale) => {
+      const pathWithLocale = getLocalizedUrl(pathname + search, newLocale);
+      location.replace(pathWithLocale);
+    },
+  });
 
   const handleLocaleChange = () => {
-    const newLocale = availableLocales.filter((loc) => loc !== locale)[0];
+    const newLocale =
+      locale === Locales.RUSSIAN ? Locales.ENGLISH : Locales.RUSSIAN;
 
     setLocale(newLocale);
-    navigate(location.pathname + location.search);
   };
 
   return (

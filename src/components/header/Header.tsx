@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router';
+import { Link as RouterLink } from 'react-router';
 import { logout } from '../../firebase';
 import {
   AppBar,
@@ -15,11 +15,12 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import RSSLogo from '../../assets/images/rss-logo.svg';
 import LanguageSwitcher from '../LanguageSwitcher';
 import { useIntlayer } from 'react-intlayer';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
 
 function Header(): React.ReactElement {
   const content = useIntlayer('header');
 
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const isScrolled = useScrollTrigger({
     disableHysteresis: true,
     threshold: 10,
