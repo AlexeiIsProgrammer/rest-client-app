@@ -34,10 +34,6 @@ const saveAllUserVariables = (
   allVariables: Record<string, Variable[]>
 ): void => {
   try {
-    console.log('saveAllUserVariables - saving to localStorage:', {
-      key: VARIABLES_STORAGE_KEY,
-      data: allVariables,
-    });
     localStorage.setItem(VARIABLES_STORAGE_KEY, JSON.stringify(allVariables));
   } catch (error) {
     console.error('Failed to save all user variables to localStorage:', error);

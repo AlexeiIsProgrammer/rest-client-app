@@ -16,7 +16,6 @@ export const useVariables = (userId: string) => {
       setVariables(loadedVariables);
       setLoading(false);
     } else {
-      console.log('useVariables - No userId, setting empty variables');
       setVariables([]);
       setLoading(false);
     }

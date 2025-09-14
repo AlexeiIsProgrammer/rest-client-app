@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '~/firebase';
 import { useVariables } from '~/hooks/useVariables';
 import type { Variable } from '../routes/variables/types';
@@ -22,7 +21,11 @@ const VariablesContext = createContext<VariablesContextType | undefined>(
 export const VariablesProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user] = useAuthState(auth);
+  const currentUser = auth.currentUser;
+  const user = {
+    uid: currentUser?.uid,
+    email: currentUser?.email,
+  };
   const userId = user?.uid || user?.email || '';
   const variablesHook = useVariables(userId);
 

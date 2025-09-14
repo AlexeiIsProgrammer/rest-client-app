@@ -26,6 +26,7 @@ import { auth } from '~/firebase';
 import saveHistory from '~/utils/saveHistory';
 import toBase64 from '~/utils/toBase64';
 import { useVariablesContext } from '~/context/VariablesContext';
+import { substituteVariables } from '~/utils/variableStorage';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -52,7 +53,8 @@ const RESTClient = ({
   const [error, setError] = useState('');
 
   const updateURL = () => {
-    const encodedUrl = toBase64(url);
+    const substitutedUrl = substituteVariables(url, variables);
+    const encodedUrl = toBase64(substitutedUrl);
     const encodedBody = requestBody
       ? toBase64(JSON.stringify(requestBody))
       : '';
@@ -84,9 +86,17 @@ const RESTClient = ({
 
   const saveResponseHistory = useCallback(
     (response: RESTResponse, user: User) => {
-      saveHistory({ user, url, method, response, requestBody, path });
+      const substitutedUrl = substituteVariables(url, variables);
+      saveHistory({
+        user,
+        url: substitutedUrl,
+        method,
+        response,
+        requestBody,
+        path,
+      });
     },
-    [url, method, requestBody, path]
+    [url, method, requestBody, path, variables]
   );
 
   useEffect(() => {
