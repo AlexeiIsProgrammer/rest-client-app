@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { METHODS } from '~/constants';
 import type { Header, RESTResponse } from '~/types';
+import {
+  substituteVariables,
+  loadVariablesFromStorage,
+} from '~/utils/variableStorage';
 
-export const useRESTClient = () => {
+export const useRESTClient = (userId: string) => {
   const [response, setResponse] = useState<RESTResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -14,11 +18,20 @@ export const useRESTClient = () => {
   ) => {
     setLoading(true);
     try {
+      const variables = loadVariablesFromStorage(userId);
+
+      const processedBody = substituteVariables(body, variables);
+
+      const processedHeaders = headers.map((header) => ({
+        name: substituteVariables(header.name, variables),
+        value: substituteVariables(header.value, variables),
+      }));
+
       const options: RequestInit = {
         method,
         headers: {
           'Content-Type': 'application/json',
-          ...headers.reduce(
+          ...processedHeaders.reduce(
             (acc, curr) => ({ ...acc, [curr.name]: curr.value }),
             {}
           ),
@@ -26,15 +39,15 @@ export const useRESTClient = () => {
       };
 
       if (
-        body &&
+        processedBody &&
         [METHODS.POST, METHODS.PUT, METHODS.PATCH, METHODS.DELETE].includes(
           method
         )
       ) {
         try {
-          options.body = JSON.stringify(JSON.parse(body));
+          options.body = JSON.stringify(JSON.parse(processedBody));
         } catch {
-          options.body = body;
+          options.body = processedBody;
           if (options.headers) {
             (options.headers as Record<string, string>)['Content-Type'] =
               'text/plain';
