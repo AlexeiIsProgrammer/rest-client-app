@@ -1,7 +1,8 @@
-import { useLoaderData, redirect, Link } from 'react-router';
+import { useLoaderData, redirect, Link as RouterLink } from 'react-router';
 import { getDocs, orderBy, query, where, collection } from 'firebase/firestore';
 import { db } from '~/firebase';
 import { getUserFromRequest } from '~/utils/auth.server';
+import transformServerTimestamp from '~/utils/transformServerTimestamp';
 
 interface RequestHistoryItem {
   uid: string;
@@ -23,6 +24,7 @@ import {
   ListItem,
   ListItemText,
   Typography,
+  Link as MuiLink,
 } from '@mui/material';
 
 export function meta() {
@@ -66,14 +68,47 @@ export default function History() {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <List>
+      <Typography variant="h5" sx={{ mb: 3 }}>
+        Request History
+      </Typography>
+      <List sx={{ bgcolor: 'white', borderRadius: 2, boxShadow: 2 }}>
         {history.map((item: RequestHistoryItem) => (
-          <ListItem key={item.id} divider>
+          <ListItem
+            key={item.id}
+            divider
+            sx={{
+              py: 2,
+              px: 2,
+              '&:hover': {
+                bgcolor: 'action.hover',
+              },
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+          >
             <ListItemText
-              primary={<Link to={item.encodedPath}>{item.endpoint}</Link>}
+              primary={
+                <MuiLink
+                  component={RouterLink}
+                  to={item.encodedPath}
+                  sx={{
+                    textDecoration: 'none',
+                  }}
+                >
+                  {item.endpoint}
+                </MuiLink>
+              }
               secondary={
-                <Typography sx={{ color: 'white' }}>
-                  {`Status: ${item.statusCode ?? 'N/A'}, Duration: ${item.duration ?? 'N/A'}`}
+                <Typography
+                  variant="body2"
+                  sx={{ color: 'text.secondary', mt: 0.5 }}
+                >
+                  {`Method: ${item.method.toUpperCase()} • Status: ${item.statusCode ?? 'N/A'} • Duration: ${
+                    item.duration
+                  }ms • Request Size: ${item.requestSize} bytes • Response Size: ${
+                    item.responseSize
+                  } bytes • Timestamp: ${transformServerTimestamp(item.timestamp.seconds)} ${item.error ? `• Error: ${item.error}` : ''}`}
                 </Typography>
               }
             />
