@@ -1,6 +1,5 @@
 import { useLoaderData } from 'react-router';
 import { getUserFromRequest } from '../../utils/auth.server';
-// import Spinner from '../../components/Spinner/Spinner';
 import MainNonAuthorized from '../../components/Main/MainNonAuthorized';
 import MainAuthorized from '../../components/Main/MainAuthorized';
 
