@@ -7,6 +7,7 @@ import type { Route as RouteType } from './+types';
 import getParams from '~/utils/getUrlParams';
 import { getUserFromRequest } from '~/utils/auth.server';
 import { redirect } from 'react-router';
+import { useIntlayer } from 'react-intlayer';
 
 export function meta() {
   return [
@@ -41,6 +42,7 @@ export async function loader({ params, request }: RouteType.LoaderArgs) {
 }
 
 const RESTClientWrapper = () => {
+  const content = useIntlayer('rest');
   const response = useLoaderData<typeof loader>();
 
   const { method, encodedUrl, encodedBody } = useParams();
@@ -67,12 +69,9 @@ const RESTClientWrapper = () => {
     return (
       <Box p={3}>
         <Alert severity="error" sx={{ mb: 2 }}>
-          Error decoding URL parameters: {(error as Error).message}
+          {content['error-header']}: {(error as Error).message}
         </Alert>
-        <Typography variant="body2">
-          The URL appears to be malformed. Please check the format or create a
-          new request.
-        </Typography>
+        <Typography variant="body2">{content['error-body']}</Typography>
       </Box>
     );
   }

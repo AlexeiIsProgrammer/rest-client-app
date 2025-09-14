@@ -26,6 +26,7 @@ import saveHistory from '~/utils/saveHistory';
 
 import { auth } from '~/firebase';
 import toBase64 from '~/utils/toBase64';
+import { useIntlayer } from 'react-intlayer';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -39,6 +40,8 @@ const RESTClient = ({
   initialHeaders = [],
   response,
 }: RESTClientProps) => {
+  const content = useIntlayer('rest-client');
+
   const [method, setMethod] = useState<METHODS>(initialMethod);
   const [url, setUrl] = useState<string>(initialUrl);
   const [requestBody, setRequestBody] = useState<string>(initialBody);
@@ -124,7 +127,7 @@ const RESTClient = ({
               disabled={!!error}
               size="large"
             >
-              Send
+              {content.send}
             </Button>
           </Grid>
         </Grid>

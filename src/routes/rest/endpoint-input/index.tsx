@@ -1,8 +1,11 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 import type { EndpointInputProps } from './types';
+import { useIntlayer } from 'react-intlayer';
 
 const EndpointInput = ({ url, setUrl }: EndpointInputProps) => {
+  const content = useIntlayer('enpoint-input');
+
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
   };
@@ -11,7 +14,7 @@ const EndpointInput = ({ url, setUrl }: EndpointInputProps) => {
     <TextField
       fullWidth
       variant="outlined"
-      label="Endpoint URL"
+      label={content.label}
       placeholder="https://api.example.com/endpoint"
       value={url}
       onChange={handleUrlChange}
