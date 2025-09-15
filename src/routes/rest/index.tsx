@@ -2,7 +2,7 @@ import { useParams, useSearchParams, useLoaderData } from 'react-router';
 import RESTClient from './rest-client';
 import { Alert, Box, Typography } from '@mui/material';
 
-import { sendServerRequest } from '~/hooks/useRESTClient/sendServerRequest';
+import { sendServerRequest } from '~/routes/rest/sendServerRequest';
 import type { Route as RouteType } from './+types';
 import getParams from '~/utils/getUrlParams';
 import { getUserFromRequest } from '~/utils/auth.server';

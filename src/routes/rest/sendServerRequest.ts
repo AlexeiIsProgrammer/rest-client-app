@@ -1,5 +1,3 @@
-'use server';
-
 import { METHODS } from '~/constants';
 import type { Header } from '~/types';
 import { substituteVariables } from '~/utils/variableStorage';
