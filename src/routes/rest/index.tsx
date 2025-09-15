@@ -23,12 +23,13 @@ export async function loader({ params, request }: RouteType.LoaderArgs) {
   }
 
   const { searchParams } = new URL(request.url);
-  const { method, encodedUrl, encodedBody } = params;
+  const { method, encodedUrl, encodedBody, encodedVariables } = params;
 
-  const { url, body, initialMethod, headers } = getParams({
+  const { url, body, initialMethod, headers, variables } = getParams({
     method,
     encodedBody,
     encodedUrl,
+    encodedVariables,
     searchParams,
   });
 
@@ -38,7 +39,7 @@ export async function loader({ params, request }: RouteType.LoaderArgs) {
 
   if (!url || !prevPath?.includes('/rest')) return null;
 
-  return await sendServerRequest(initialMethod, url, body, headers);
+  return await sendServerRequest(initialMethod, url, body, headers, variables);
 }
 
 const RESTClientWrapper = () => {

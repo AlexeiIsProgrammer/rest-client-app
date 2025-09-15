@@ -5,6 +5,7 @@ import { useI18nHTMLAttributes } from './hooks/useI18nHTMLAttributes';
 import { IntlayerProvider } from 'react-intlayer';
 import { configuration } from 'intlayer';
 import type { Route } from './+types/layout';
+import { VariablesProvider } from './context/VariablesContext';
 
 const Layout = ({ params }: Route.ComponentProps) => {
   useI18nHTMLAttributes();
@@ -13,11 +14,13 @@ const Layout = ({ params }: Route.ComponentProps) => {
     <IntlayerProvider
       locale={params.locale ?? configuration.internationalization.defaultLocale}
     >
-      <div>
-        <Header />
-        <Outlet />
-        <Footer />
-      </div>
+      <VariablesProvider>
+        <div>
+          <Header />
+          <Outlet />
+          <Footer />
+        </div>
+      </VariablesProvider>
     </IntlayerProvider>
   );
 };

@@ -6,10 +6,10 @@ export default [
     route('/:locale?/signup', 'routes/signup/index.tsx'),
     route('/:locale?/signin', 'routes/signin/index.tsx'),
     route(
-      '/:locale?/rest/:method?/:encodedUrl?/:encodedBody?',
+      '/:locale?/rest/:method?/:encodedUrl?/:encodedBody?/:encodedVariables?',
       './routes/rest/index.tsx'
     ),
-    route('/:locale?/variables', './routes/variables/index.tsx'),
+    route('/:locale?/variables', './routes/variables/Variables.lazy.tsx'),
     route('/:locale?/history', './routes/history/index.tsx'),
   ]),
 ] satisfies RouteConfig;

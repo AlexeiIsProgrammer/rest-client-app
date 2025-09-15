@@ -1,6 +1,7 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router';
-import { logout } from '../../firebase';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { logout, auth } from '../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   AppBar,
   Toolbar,
@@ -12,12 +13,16 @@ import {
 import Login from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
-import RSSLogo from '../../assets/images/rss-logo.svg';
-import LanguageSwitcher from '../LanguageSwitcher';
-import { useIntlayer } from 'react-intlayer';
+import students from '../../assets/images/mentor-with-his-students.svg';
 import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 function Header(): React.ReactElement {
+  const [user, setUser] = useState<{
+    uid: string;
+    email: string | null;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
   const content = useIntlayer('header');
 
   const navigate = useLocalizedNavigate();
@@ -26,10 +31,19 @@ function Header(): React.ReactElement {
     threshold: 10,
   });
 
-  const handleLogout = () => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  function handleLogout() {
     logout();
-    navigate('/signin');
-  };
+    navigate('/');
+  }
 
   return (
     <AppBar
@@ -50,16 +64,16 @@ function Header(): React.ReactElement {
         }}
       >
         <ButtonBase
-          component={RouterLink}
+          component={Link}
           to="/"
           aria-label={content.home?.value}
           sx={{ p: 0.5, borderRadius: 1 }}
         >
           <Box
             component="img"
-            src={RSSLogo}
+            src={students}
             alt={content.logo?.value}
-            sx={{ height: 32, display: 'block' }}
+            sx={{ height: 42, display: 'block' }}
           />
         </ButtonBase>
 
@@ -67,21 +81,40 @@ function Header(): React.ReactElement {
           <LanguageSwitcher />
         </Box>
 
-        <Box sx={{ '& button': { m: 1 } }}>
-          <Button startIcon={<Login />} variant="outlined" size="medium">
-            {content['sign-in']}
-          </Button>
-          <Button startIcon={<PersonAdd />} variant="outlined" size="medium">
-            {content['sign-up']}
-          </Button>
-          <Button
-            startIcon={<Logout />}
-            variant="outlined"
-            size="medium"
-            onClick={handleLogout}
-          >
-            {content.logout}
-          </Button>
+        <Box sx={{ '& > *': { m: 1 } }}>
+          {!loading && user && user.email ? (
+            <Button
+              startIcon={<Logout />}
+              variant="outlined"
+              size="medium"
+              onClick={() => {
+                handleLogout();
+              }}
+            >
+              {content.logout}
+            </Button>
+          ) : (
+            <>
+              <Button
+                startIcon={<Login />}
+                component={Link}
+                to="/signin"
+                variant="outlined"
+                size="medium"
+              >
+                {content['sign-in']}
+              </Button>
+              <Button
+                startIcon={<PersonAdd />}
+                component={Link}
+                to="/signup"
+                variant="outlined"
+                size="medium"
+              >
+                {content['sign-up']}
+              </Button>
+            </>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

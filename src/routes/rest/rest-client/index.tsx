@@ -21,12 +21,13 @@ import ResponseSection from '../response-section';
 import { type Header, type RESTResponse } from '~/types';
 import { METHODS } from '~/constants';
 import validateUrl from '~/utils/validateUrl';
-import saveHistory from '~/utils/saveHistory';
-
 import { auth } from '~/firebase';
+import saveHistory from '~/utils/saveHistory';
 import toBase64 from '~/utils/toBase64';
 import { useIntlayer } from 'react-intlayer';
 import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
+import { useVariablesContext } from '~/context/VariablesContext';
+import { substituteVariables } from '~/utils/variableStorage';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -50,14 +51,17 @@ const RESTClient = ({
   const [path, setPath] = useState<string>('');
 
   const navigate = useLocalizedNavigate();
+  const { variables } = useVariablesContext();
 
   const [error, setError] = useState('');
 
   const updateURL = () => {
-    const encodedUrl = toBase64(url);
+    const substitutedUrl = substituteVariables(url, variables);
+    const encodedUrl = toBase64(substitutedUrl);
     const encodedBody = requestBody
       ? toBase64(JSON.stringify(requestBody))
       : '';
+    const encodedVariables = toBase64(JSON.stringify(variables));
 
     const queryParams = new URLSearchParams();
     headers.forEach(({ name, value }) => {
@@ -67,14 +71,14 @@ const RESTClient = ({
     });
 
     const queryString = queryParams.toString();
-    const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${queryString ? `?${queryString}` : ''}`;
+    const newPath = `/rest/${method}/${encodedUrl}${encodedBody ? `/${encodedBody}` : ''}${encodedVariables ? `/${encodedVariables}` : ''}${queryString ? `?${queryString}` : ''}`;
 
     navigate(newPath, { replace: true });
     setPath(newPath);
   };
 
   const handleSendRequest = async () => {
-    const error = validateUrl(url);
+    const error = validateUrl(url, variables);
     if (error) {
       setError(error);
       return;
@@ -85,16 +89,24 @@ const RESTClient = ({
 
   const saveResponseHistory = useCallback(
     (response: RESTResponse, user: User) => {
-      saveHistory({ user, url, method, response, requestBody, path });
+      const substitutedUrl = substituteVariables(url, variables);
+      saveHistory({
+        user,
+        url: substitutedUrl,
+        method,
+        response,
+        requestBody,
+        path,
+      });
     },
-    [url, method, requestBody, path]
+    [url, method, requestBody, path, variables]
   );
 
   useEffect(() => {
     if (!url) return;
 
-    setError(validateUrl(url));
-  }, [url]);
+    setError(validateUrl(url, variables));
+  }, [url, variables]);
 
   useEffect(() => {
     const user = auth.currentUser;
