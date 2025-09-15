@@ -1,6 +1,6 @@
 import { reactRouter } from '@react-router/dev/vite';
 import { defineConfig, type UserConfig } from 'vite';
-import { intLayerMiddlewarePlugin, intlayerPlugin } from 'vite-intlayer';
+import { intlayerPlugin } from 'vite-intlayer';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
@@ -8,7 +8,6 @@ export default defineConfig({
     !process.env.VITEST && reactRouter(),
     tsconfigPaths(),
     intlayerPlugin(),
-    intLayerMiddlewarePlugin(),
   ],
   test: {
     environment: 'jsdom',
