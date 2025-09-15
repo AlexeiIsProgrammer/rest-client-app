@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Box, IconButton, Typography } from '@mui/material';
-import { GitHub } from '@mui/icons-material';
+import GitHub from '@mui/icons-material/GitHub';
 import RSSIcon from '../../assets/images/rss-logo.svg';
 
 function Footer(): React.ReactElement {

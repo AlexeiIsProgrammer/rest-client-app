@@ -16,6 +16,7 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import students from '../../assets/images/mentor-with-his-students.svg';
 import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { useIntlayer } from 'react-intlayer';
 
 function Header(): React.ReactElement {
   const [user, setUser] = useState<{

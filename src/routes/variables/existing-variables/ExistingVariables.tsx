@@ -14,11 +14,18 @@ import {
   Alert,
   Snackbar,
 } from '@mui/material';
-import { Delete, Add, Edit, Save, Cancel } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
+import Add from '@mui/icons-material/Add';
+import Edit from '@mui/icons-material/Edit';
+import Save from '@mui/icons-material/Save';
+import Cancel from '@mui/icons-material/Cancel';
 import { useVariablesContext } from '../../../context/VariablesContext';
 import type { Variable } from '../types';
+import { useIntlayer } from 'react-intlayer';
 
 function ExistingVariables() {
+  const content = useIntlayer('existing-variables');
+
   const { variables, addVariable, updateVariable, deleteVariable, loading } =
     useVariablesContext();
   const [newVariableName, setNewVariableName] = useState('');
@@ -45,7 +52,7 @@ function ExistingVariables() {
 
   const handleAddVariable = () => {
     if (!newVariableName.trim() || !newVariableValue.trim()) {
-      showSnackbar('Both variable name and value are required', 'error');
+      showSnackbar(content.required?.value, 'error');
       return;
     }
 
@@ -53,14 +60,14 @@ function ExistingVariables() {
       (v) => v.name === newVariableName.trim()
     );
     if (existingVariable) {
-      showSnackbar('Variable name already exists', 'error');
+      showSnackbar(content.exists?.value, 'error');
       return;
     }
 
     addVariable(newVariableName, newVariableValue);
     setNewVariableName('');
     setNewVariableValue('');
-    showSnackbar('Variable added successfully');
+    showSnackbar(content.added?.value);
   };
 
   const handleStartEdit = (variable: Variable) => {
@@ -71,7 +78,7 @@ function ExistingVariables() {
 
   const handleSaveEdit = () => {
     if (!editingName.trim() || !editingValue.trim()) {
-      showSnackbar('Both variable name and value are required', 'error');
+      showSnackbar(content.required?.value, 'error');
       return;
     }
 
@@ -79,7 +86,7 @@ function ExistingVariables() {
       (v) => v.name === editingName.trim() && v.id !== editingId
     );
     if (existingVariable) {
-      showSnackbar('Variable name already exists', 'error');
+      showSnackbar(content.exists?.value, 'error');
       return;
     }
 
@@ -88,7 +95,7 @@ function ExistingVariables() {
       setEditingId(null);
       setEditingName('');
       setEditingValue('');
-      showSnackbar('Variable updated successfully');
+      showSnackbar(content.update?.value);
     }
   };
 
@@ -100,7 +107,9 @@ function ExistingVariables() {
 
   const handleDeleteVariable = (id: string, name: string) => {
     deleteVariable(id);
-    showSnackbar(`Variable "${name}" deleted successfully`);
+    showSnackbar(
+      `${content.variable?.value} "${name}" ${content.deleted?.value}`
+    );
   };
 
   const handleKeyPress = (event: React.KeyboardEvent, action: () => void) => {
@@ -113,7 +122,7 @@ function ExistingVariables() {
   if (loading) {
     return (
       <Box sx={{ p: 2 }}>
-        <Typography>Loading variables...</Typography>
+        <Typography>{content.loading}</Typography>
       </Box>
     );
   }
@@ -129,16 +138,16 @@ function ExistingVariables() {
     >
       <Paper variant="outlined" sx={{ p: 2 }}>
         <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-          Variables
+          {content.variables}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Use variables in your requests with the format: {'{'}
+          {content.format}: {'{'}
           {'{'}
           <em>variableName</em>
           {'}'}
           {'}'}
           <br />
-          <strong>Examples:</strong>
+          <strong>{content.examples}:</strong>
           <br />• URL:{' '}
           <code>
             https://api.github.com/{'{'}
@@ -147,7 +156,7 @@ function ExistingVariables() {
             {'}'}
             {'}'}{' '}
           </code>
-          <br />• Header:{' '}
+          <br />• {content.header}:{' '}
           <code>
             Authorization: Bearer {'{'}
             {'{'}
@@ -168,11 +177,11 @@ function ExistingVariables() {
           <TableHead>
             <TableRow>
               <TableCell sx={{ width: '40%', fontWeight: 600 }}>
-                Variable
+                {content.variable}
               </TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Value</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>{content.value}</TableCell>
               <TableCell align="right" sx={{ width: 120, fontWeight: 600 }}>
-                Actions
+                {content.actions}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -184,7 +193,7 @@ function ExistingVariables() {
                   align="center"
                   sx={{ py: 6, color: 'text.secondary' }}
                 >
-                  No variables yet. Add your first variable below.
+                  {content['no-variables']}
                 </TableCell>
               </TableRow>
             )}
@@ -237,14 +246,14 @@ function ExistingVariables() {
                         size="small"
                         color="primary"
                         onClick={handleSaveEdit}
-                        title="Save changes"
+                        title={content.save?.value}
                       >
                         <Save fontSize="small" />
                       </IconButton>
                       <IconButton
                         size="small"
                         onClick={handleCancelEdit}
-                        title="Cancel editing"
+                        title={content.cancel?.value}
                       >
                         <Cancel fontSize="small" />
                       </IconButton>
@@ -254,7 +263,7 @@ function ExistingVariables() {
                       <IconButton
                         size="small"
                         onClick={() => handleStartEdit(variable)}
-                        title="Edit variable"
+                        title={content.edit?.value}
                       >
                         <Edit fontSize="small" />
                       </IconButton>
@@ -264,7 +273,7 @@ function ExistingVariables() {
                         onClick={() =>
                           handleDeleteVariable(variable.id, variable.name)
                         }
-                        title="Delete variable"
+                        title={content.delete?.value}
                       >
                         <Delete fontSize="small" />
                       </IconButton>
@@ -278,7 +287,7 @@ function ExistingVariables() {
                 <TextField
                   size="small"
                   fullWidth
-                  placeholder="Variable name"
+                  placeholder={content['variable-name']?.value}
                   value={newVariableName}
                   onChange={(e) => setNewVariableName(e.target.value)}
                   onKeyPress={(e) => handleKeyPress(e, handleAddVariable)}
@@ -288,7 +297,7 @@ function ExistingVariables() {
                 <TextField
                   size="small"
                   fullWidth
-                  placeholder="Variable value"
+                  placeholder={content['variable-value']?.value}
                   value={newVariableValue}
                   onChange={(e) => setNewVariableValue(e.target.value)}
                   onKeyPress={(e) => handleKeyPress(e, handleAddVariable)}
@@ -302,7 +311,7 @@ function ExistingVariables() {
                   onClick={handleAddVariable}
                   disabled={!newVariableName.trim() || !newVariableValue.trim()}
                 >
-                  Add
+                  {content.add}
                 </Button>
               </TableCell>
             </TableRow>

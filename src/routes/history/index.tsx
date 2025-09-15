@@ -27,6 +27,7 @@ import {
   Link as MuiLink,
 } from '@mui/material';
 import LocalizedLink from '~/components/LocalizedLink';
+import { useIntlayer } from 'react-intlayer';
 
 export function meta() {
   return [
@@ -56,12 +57,14 @@ export const loader = async ({ request }: { request: Request }) => {
 };
 
 export default function History() {
+  const content = useIntlayer('history');
+
   const { history } = useLoaderData();
   if (!history.length) {
     return (
       <Container maxWidth="sm">
         <Typography sx={{ mt: 4, textAlign: 'center' }}>
-          You have not executed any requests yet. It is empty here.
+          {content['error-message']}
         </Typography>
       </Container>
     );
@@ -70,7 +73,7 @@ export default function History() {
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Typography variant="h5" sx={{ mb: 3 }}>
-        Request History
+        {content.title}
       </Typography>
       <List sx={{ bgcolor: 'white', borderRadius: 2, boxShadow: 2 }}>
         {history.map((item: RequestHistoryItem) => (
@@ -105,11 +108,11 @@ export default function History() {
                   variant="body2"
                   sx={{ color: 'text.secondary', mt: 0.5 }}
                 >
-                  {`Method: ${item.method.toUpperCase()} • Status: ${item.statusCode ?? 'N/A'} • Duration: ${
+                  {`${content.method?.value}: ${item.method.toUpperCase()} • ${content.status?.value}: ${item.statusCode ?? 'N/A'} • ${content.duration?.value}: ${
                     item.duration
-                  }ms • Request Size: ${item.requestSize} bytes • Response Size: ${
+                  }${content.ms?.value} • ${content['request-size']?.value}: ${item.requestSize} ${content.bytes?.value}bytes • ${content['response-size']?.value}: ${
                     item.responseSize
-                  } bytes • Timestamp: ${transformServerTimestamp(item.timestamp.seconds)} ${item.error ? `• Error: ${item.error}` : ''}`}
+                  } ${content.bytes?.value} • ${content.timestamp?.value}: ${transformServerTimestamp(item.timestamp.seconds)} ${item.error ? `• ${content.error?.value}: ${item.error}` : ''}`}
                 </Typography>
               }
             />
