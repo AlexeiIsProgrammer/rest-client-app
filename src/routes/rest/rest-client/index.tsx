@@ -85,7 +85,20 @@ const RESTClient = ({
       return;
     }
 
-    asyncHandleSendRequest({ method, url, body: requestBody, headers });
+    const substitutedUrl = substituteVariables(url, variables);
+    const substitutedBody = substituteVariables(requestBody, variables);
+    const substitutedHeaders = headers.map(header => ({
+      ...header,
+      name: substituteVariables(header.name, variables),
+      value: substituteVariables(header.value, variables)
+    }));
+
+    asyncHandleSendRequest({ 
+      method, 
+      url: substitutedUrl, 
+      body: substitutedBody, 
+      headers: substitutedHeaders 
+    });
     updateURL();
   };
 
