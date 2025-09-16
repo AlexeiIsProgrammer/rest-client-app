@@ -47,7 +47,7 @@ const ResponseSection = ({ response }: ResponseSectionProps) => {
           {response.status && `- ${response.status} ${response.statusText}`}
           {responseTime}
         </Typography>
-        {response.status && (
+        {response.status && Boolean(response.status) && (
           <Chip
             label={response.status}
             color={response.status < 400 ? 'success' : 'error'}
