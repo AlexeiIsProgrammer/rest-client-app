@@ -7,6 +7,7 @@ import type { Route as RouteType } from './+types';
 import getParams from '~/utils/getUrlParams';
 import { getUserFromRequest } from '~/utils/auth.server';
 import { redirect } from 'react-router';
+import { useIntlayer } from 'react-intlayer';
 import type { METHODS } from '~/constants';
 import { useCallback } from 'react';
 import type { Header } from '~/types';
@@ -39,6 +40,7 @@ export async function action({ request }: RouteType.ActionArgs) {
 }
 
 const RESTClientWrapper = () => {
+  const content = useIntlayer('rest');
   const fetcher = useFetcher();
   const response = fetcher.data;
 
@@ -87,12 +89,9 @@ const RESTClientWrapper = () => {
     return (
       <Box p={3}>
         <Alert severity="error" sx={{ mb: 2 }}>
-          Error decoding URL parameters: {(error as Error).message}
+          {content['error-header']}: {(error as Error).message}
         </Alert>
-        <Typography variant="body2">
-          The URL appears to be malformed. Please check the format or create a
-          new request.
-        </Typography>
+        <Typography variant="body2">{content['error-body']}</Typography>
       </Box>
     );
   }

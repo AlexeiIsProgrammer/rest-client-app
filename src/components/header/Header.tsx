@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
 import { logout, auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
@@ -14,6 +13,10 @@ import Login from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import students from '../../assets/images/mentor-with-his-students.svg';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
+import LanguageSwitcher from '../LanguageSwitcher';
+import { useIntlayer } from 'react-intlayer';
+import LocalizedLink from '../LocalizedLink';
 
 function Header(): React.ReactElement {
   const [user, setUser] = useState<{
@@ -21,7 +24,9 @@ function Header(): React.ReactElement {
     email: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const content = useIntlayer('header');
+
+  const navigate = useLocalizedNavigate();
   const isScrolled = useScrollTrigger({
     disableHysteresis: true,
     threshold: 10,
@@ -60,23 +65,21 @@ function Header(): React.ReactElement {
         }}
       >
         <ButtonBase
-          component={Link}
+          component={LocalizedLink}
           to="/"
-          aria-label="Go to home"
+          aria-label={content.home?.value}
           sx={{ p: 0.5, borderRadius: 1 }}
         >
           <Box
             component="img"
             src={students}
-            alt="Logo"
+            alt={content.logo?.value}
             sx={{ height: 42, display: 'block' }}
           />
         </ButtonBase>
 
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-          <Button variant="outlined" size="medium">
-            Lang Toggle
-          </Button>
+          <LanguageSwitcher />
         </Box>
 
         <Box sx={{ '& > *': { m: 1 } }}>
@@ -89,27 +92,27 @@ function Header(): React.ReactElement {
                 handleLogout();
               }}
             >
-              Logout
+              {content.logout}
             </Button>
           ) : (
             <>
               <Button
                 startIcon={<Login />}
-                component={Link}
+                component={LocalizedLink}
                 to="/signin"
                 variant="outlined"
                 size="medium"
               >
-                Sign In
+                {content['sign-in']}
               </Button>
               <Button
                 startIcon={<PersonAdd />}
-                component={Link}
+                component={LocalizedLink}
                 to="/signup"
                 variant="outlined"
                 size="medium"
               >
-                Sign Up
+                {content['sign-up']}
               </Button>
             </>
           )}

@@ -5,16 +5,20 @@ import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
 import { logInWithEmailAndPassword } from '../../firebase';
 import { validateEmail } from '../../utils/validation';
-import { useNavigate, Link } from 'react-router';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
+import LocalizedLink from '~/components/LocalizedLink';
+import { useIntlayer } from 'react-intlayer';
 
 export const loader = requireGuestLoader;
 
 export default function SignIn() {
+  const content = useIntlayer('sign-in');
+
   const [isFetching, setIsFetching] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,7 +38,7 @@ export default function SignIn() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('An unexpected error occurred');
+        setError(content.error?.value);
       }
     }
   }
@@ -44,7 +48,7 @@ export default function SignIn() {
       {isFetching && <Spinner />}
       <Container maxWidth="sm">
         <Typography variant="h4" gutterBottom>
-          Sign In
+          {content['sign-in']}
         </Typography>
         <AuthForm
           email={email}
@@ -53,10 +57,10 @@ export default function SignIn() {
           setPassword={setPassword}
           handleSubmit={handleSubmit}
           error={error}
-          buttonText="Login"
+          buttonText={content.login?.value}
         />
         <Typography sx={{ mt: 2, textAlign: 'center' }}>
-          <Link to="/signup">Sign up</Link>
+          <LocalizedLink to="/signup">{content['sign-up']}</LocalizedLink>
         </Typography>
       </Container>
     </>

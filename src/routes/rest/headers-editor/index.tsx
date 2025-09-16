@@ -11,8 +11,11 @@ import Add from '@mui/icons-material/Add';
 import Delete from '@mui/icons-material/Delete';
 import type { HeadersEditorProps } from './types';
 import type { Header } from '~/types';
+import { useIntlayer } from 'react-intlayer';
 
 const HeadersEditor = ({ headers, setHeaders }: HeadersEditorProps) => {
+  const content = useIntlayer('headers-editor');
+
   const addHeader = () => {
     setHeaders([...headers, { name: '', value: '' }]);
   };
@@ -32,7 +35,7 @@ const HeadersEditor = ({ headers, setHeaders }: HeadersEditorProps) => {
   return (
     <Box py={3}>
       <Typography variant="h6" gutterBottom>
-        Request Headers
+        {content.request}
       </Typography>
 
       {headers.map(({ name, value }, index) => (
@@ -46,7 +49,7 @@ const HeadersEditor = ({ headers, setHeaders }: HeadersEditorProps) => {
           <Grid>
             <TextField
               fullWidth
-              placeholder="Header name"
+              placeholder={content.name?.value}
               name="name"
               value={name}
               onChange={(e) =>
@@ -61,7 +64,7 @@ const HeadersEditor = ({ headers, setHeaders }: HeadersEditorProps) => {
           <Grid>
             <TextField
               fullWidth
-              placeholder="Header value"
+              placeholder={content.value?.value}
               name="value"
               value={value}
               onChange={(e) =>
@@ -82,7 +85,7 @@ const HeadersEditor = ({ headers, setHeaders }: HeadersEditorProps) => {
       ))}
 
       <Button startIcon={<Add />} onClick={addHeader}>
-        Add Header
+        {content.add}
       </Button>
     </Box>
   );

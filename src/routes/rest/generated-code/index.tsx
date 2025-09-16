@@ -8,12 +8,15 @@ import {
   Paper,
 } from '@mui/material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import atomDark from 'react-syntax-highlighter/dist/esm/styles/prism/atom-dark';
+import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
 import type { GeneratedCodeProps } from './types';
 import { generateCode } from '~/utils/codeGenerators';
 import { LANGUAGE_OPTIONS, LANGUAGES } from '~/constants';
+import { useIntlayer } from 'react-intlayer';
 
 const GeneratedCode = ({ method, url, body, headers }: GeneratedCodeProps) => {
+  const content = useIntlayer('generated-code');
+
   const [language, setLanguage] = useState(LANGUAGES.curl);
   const [code, setCode] = useState<string>(LANGUAGES.curl);
 
@@ -25,10 +28,10 @@ const GeneratedCode = ({ method, url, body, headers }: GeneratedCodeProps) => {
   return (
     <Box py={3}>
       <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Language</InputLabel>
+        <InputLabel>{content.language}Language</InputLabel>
         <Select
           value={language}
-          label="Language"
+          label={content.language}
           onChange={(e) => setLanguage(e.target.value)}
         >
           {LANGUAGE_OPTIONS.map((lang) => (
@@ -40,7 +43,6 @@ const GeneratedCode = ({ method, url, body, headers }: GeneratedCodeProps) => {
       </FormControl>
 
       <Paper elevation={2}>
-        {/* {code} */}
         <SyntaxHighlighter
           language={
             language.includes('javascript') || language === LANGUAGES.nodejs
@@ -51,7 +53,7 @@ const GeneratedCode = ({ method, url, body, headers }: GeneratedCodeProps) => {
           showLineNumbers
           customStyle={{ margin: 0, borderRadius: '4px' }}
         >
-          {code || '// Select a language to generate code'}
+          {code || content.select?.value}
         </SyntaxHighlighter>
       </Paper>
     </Box>

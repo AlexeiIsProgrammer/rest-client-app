@@ -19,9 +19,12 @@ import Cancel from '@mui/icons-material/Cancel';
 import type { ResponseSectionProps } from './types';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import atomDark from 'react-syntax-highlighter/dist/esm/styles/prism/atom-dark';
+import atomDark from 'react-syntax-highlighter/dist/cjs/styles/prism/atom-dark';
+import { useIntlayer } from 'react-intlayer';
 
 const ResponseSection = ({ response }: ResponseSectionProps) => {
+  const content = useIntlayer('response-section');
+
   const [activeTab, setActiveTab] = useState(0);
   const [expandedHeaders, setExpandedHeaders] = useState(false);
 
@@ -40,10 +43,9 @@ const ResponseSection = ({ response }: ResponseSectionProps) => {
           <CheckCircle color="success" sx={{ mr: 1 }} />
         )}
         <Typography variant="h6" component="h2">
-          Response{' '}
-          {Boolean(response.status) &&
-            `- ${response.status} ${response.statusText}`}
-          {responseTime || ''}
+          {content.response}{' '}
+          {response.status && `- ${response.status} ${response.statusText}`}
+          {responseTime}
         </Typography>
         {response.status && Boolean(response.status) && (
           <Chip
@@ -83,7 +85,9 @@ const ResponseSection = ({ response }: ResponseSectionProps) => {
                   : JSON.stringify(response.data, null, 2)}
               </SyntaxHighlighter>
             ) : (
-              <Typography color="textSecondary">No response body</Typography>
+              <Typography color="textSecondary">
+                {content['no-response']}
+              </Typography>
             )}
           </Box>
         )}
@@ -97,7 +101,7 @@ const ResponseSection = ({ response }: ResponseSectionProps) => {
               sx={{ cursor: 'pointer' }}
             >
               <Typography variant="subtitle1">
-                Headers ({Object.keys(response.headers).length})
+                {content.headers} ({Object.keys(response.headers).length})
               </Typography>
               <IconButton size="small">
                 {expandedHeaders ? <ExpandLess /> : <ExpandMore />}
@@ -140,7 +144,7 @@ const ResponseSection = ({ response }: ResponseSectionProps) => {
       {response.error && (
         <Box mt={2} p={2} bgcolor="error.light" borderRadius={1}>
           <Typography variant="body2" color="error.contrastText">
-            <strong>Error:</strong> {response.error}
+            <strong>{content.error}:</strong> {response.error}
           </Typography>
         </Box>
       )}

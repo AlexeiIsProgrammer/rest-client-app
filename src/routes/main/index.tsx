@@ -1,6 +1,5 @@
 import { useLoaderData } from 'react-router';
 import { getUserFromRequest } from '../../utils/auth.server';
-// import Spinner from '../../components/Spinner/Spinner';
 import MainNonAuthorized from '../../components/Main/MainNonAuthorized';
 import MainAuthorized from '../../components/Main/MainAuthorized';
 
@@ -20,9 +19,6 @@ export async function loader({ request }: { request: Request }) {
 
 export default function Main() {
   const { user } = useLoaderData();
-  // if (loading) {
-  //   return <Spinner />;
-  // }
 
   if (user && user.email) {
     return <MainAuthorized email={user.email} />;
