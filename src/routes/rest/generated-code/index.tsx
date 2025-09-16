@@ -70,7 +70,8 @@ const GeneratedCode = ({ method, url, body, headers }: GeneratedCodeProps) => {
               padding: 2,
               backgroundColor: '#1d1f21',
               color: '#c5c8c6',
-              fontFamily: 'Inconsolata, Monaco, Consolas, "Courier New", Courier, monospace',
+              fontFamily:
+                'Inconsolata, Monaco, Consolas, "Courier New", Courier, monospace',
               fontSize: '14px',
               lineHeight: 1.5,
               overflow: 'auto',

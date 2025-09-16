@@ -78,9 +78,7 @@ export const sendServerRequest = async (
     try {
       new URL(processedUrl);
     } catch {
-      throw new Error(
-        `Invalid URL: ${processedUrl}`
-      );
+      throw new Error(`Invalid URL: ${processedUrl}`);
     }
 
     const startTime = Date.now();
