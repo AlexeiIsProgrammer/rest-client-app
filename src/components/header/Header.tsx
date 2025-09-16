@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router';
 import { logout, auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
@@ -17,6 +16,7 @@ import students from '../../assets/images/mentor-with-his-students.svg';
 import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
 import LanguageSwitcher from '../LanguageSwitcher';
 import { useIntlayer } from 'react-intlayer';
+import LocalizedLink from '../LocalizedLink';
 
 function Header(): React.ReactElement {
   const [user, setUser] = useState<{
@@ -65,7 +65,7 @@ function Header(): React.ReactElement {
         }}
       >
         <ButtonBase
-          component={Link}
+          component={LocalizedLink}
           to="/"
           aria-label={content.home?.value}
           sx={{ p: 0.5, borderRadius: 1 }}
@@ -98,7 +98,7 @@ function Header(): React.ReactElement {
             <>
               <Button
                 startIcon={<Login />}
-                component={Link}
+                component={LocalizedLink}
                 to="/signin"
                 variant="outlined"
                 size="medium"
@@ -107,7 +107,7 @@ function Header(): React.ReactElement {
               </Button>
               <Button
                 startIcon={<PersonAdd />}
-                component={Link}
+                component={LocalizedLink}
                 to="/signup"
                 variant="outlined"
                 size="medium"

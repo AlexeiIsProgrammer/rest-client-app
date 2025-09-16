@@ -12,6 +12,7 @@ export const useLocalizedNavigate = () => {
 
   const localizedNavigate = (to: string, options?: NavigateOptions) => {
     const localedTo = isExternal(to) ? to : getLocalizedUrl(to, locale);
+
     navigate(localedTo, options);
   };
 

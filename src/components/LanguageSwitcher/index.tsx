@@ -11,15 +11,13 @@ const LanguageSwitcher = () => {
   const { locale, setLocale } = useLocale({
     onLocaleChange: (newLocale) => {
       const pathWithLocale = getLocalizedUrl(pathname + search, newLocale);
+
       location.replace(pathWithLocale);
     },
   });
 
   const handleLocaleChange = () => {
-    const newLocale =
-      locale === Locales.RUSSIAN ? Locales.ENGLISH : Locales.RUSSIAN;
-
-    setLocale(newLocale);
+    setLocale(locale === Locales.RUSSIAN ? Locales.ENGLISH : Locales.RUSSIAN);
   };
 
   return (
