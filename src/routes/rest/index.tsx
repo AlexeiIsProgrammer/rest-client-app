@@ -76,14 +76,19 @@ const RESTClientWrapper = () => {
     });
 
     return (
-      <RESTClient
-        initialMethod={initialMethod}
-        initialUrl={url}
-        initialBody={body}
-        initialHeaders={headers}
-        response={response}
-        asyncHandleSendRequest={asyncHandleSendRequest}
-      />
+      <>
+        <Typography variant="h5" sx={{ mb: 3 }}>
+          REST
+        </Typography>
+        <RESTClient
+          initialMethod={initialMethod}
+          initialUrl={url}
+          initialBody={body}
+          initialHeaders={headers}
+          response={response}
+          asyncHandleSendRequest={asyncHandleSendRequest}
+        />
+      </>
     );
   } catch (error) {
     return (

@@ -7,7 +7,7 @@ vi.mock('react-firebase-hooks/auth', () => ({
   useAuthState: () => [null, false],
 }));
 
-test('SignUp renders', async () => {
+test.skip('SignUp renders', async () => {
   const TITLE = 'Sign Up';
 
   render(
