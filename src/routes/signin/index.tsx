@@ -5,7 +5,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
 import { logInWithEmailAndPassword } from '../../firebase';
 import { validateEmail } from '../../utils/validation';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 
 export const loader = requireGuestLoader;
 
