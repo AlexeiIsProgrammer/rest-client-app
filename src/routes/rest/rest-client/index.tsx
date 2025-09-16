@@ -39,6 +39,7 @@ const RESTClient = ({
   initialBody = '',
   initialHeaders = [],
   response,
+  asyncHandleSendRequest,
 }: RESTClientProps) => {
   const [method, setMethod] = useState<METHODS>(initialMethod);
   const [url, setUrl] = useState<string>(initialUrl);
@@ -81,12 +82,14 @@ const RESTClient = ({
       return;
     }
 
+    asyncHandleSendRequest({ method, url, body: requestBody, headers });
     updateURL();
   };
 
   const saveResponseHistory = useCallback(
     (response: RESTResponse, user: User) => {
       const substitutedUrl = substituteVariables(url, variables);
+
       saveHistory({
         user,
         url: substitutedUrl,
@@ -110,10 +113,10 @@ const RESTClient = ({
     if (user && response) {
       saveResponseHistory(response, user);
     }
-  }, [response, saveResponseHistory]);
+  }, [response]);
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 3 }}>
+    <Container maxWidth="lg" sx={{ mt: 3, pb: 10 }}>
       <StyledPaper>
         <Grid container spacing={2} alignItems="flex-start">
           <Grid>

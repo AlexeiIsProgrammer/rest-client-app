@@ -14,7 +14,11 @@ import {
   Alert,
   Snackbar,
 } from '@mui/material';
-import { Delete, Add, Edit, Save, Cancel } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
+import Add from '@mui/icons-material/Add';
+import Edit from '@mui/icons-material/Edit';
+import Save from '@mui/icons-material/Save';
+import Cancel from '@mui/icons-material/Cancel';
 import { useVariablesContext } from '../../../context/VariablesContext';
 import type { Variable } from '../types';
 

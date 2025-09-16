@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, InputAdornment, Chip } from '@mui/material';
-import { Code } from '@mui/icons-material';
+import Code from '@mui/icons-material/Code';
 import type { EndpointInputProps } from './types';
 import { countVariables } from '~/utils/variableHighlight';
 

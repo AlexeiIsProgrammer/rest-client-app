@@ -41,10 +41,11 @@ const ResponseSection = ({ response }: ResponseSectionProps) => {
         )}
         <Typography variant="h6" component="h2">
           Response{' '}
-          {response.status && `- ${response.status} ${response.statusText}`}
-          {responseTime}
+          {Boolean(response.status) &&
+            `- ${response.status} ${response.statusText}`}
+          {responseTime || ''}
         </Typography>
-        {response.status && (
+        {response.status && Boolean(response.status) && (
           <Chip
             label={response.status}
             color={response.status < 400 ? 'success' : 'error'}
