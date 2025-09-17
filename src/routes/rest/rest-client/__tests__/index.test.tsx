@@ -1,25 +1,30 @@
-import { expect, test } from 'vitest';
+import { expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { createRoutesStub } from 'react-router';
 import { VariablesProvider } from '~/context/VariablesContext';
 import RESTClient from '..';
 
-test('REST-client renders', async () => {
-  const ROUTE = '/ru/rest';
-  const TEST_ID = 'container';
+const ROUTE = '/rest';
+const testRoutes = [
+  {
+    path: ROUTE,
+    Component: () => <RESTClient />,
+  },
+];
 
-  const Stub = createRoutesStub([
-    {
-      path: ROUTE,
-      Component: RESTClient,
-    },
-  ]);
+const renderWithProviders = (children: React.JSX.Element) =>
+  render(<VariablesProvider>{children}</VariablesProvider>);
 
-  render(
-    <VariablesProvider>
-      <Stub initialEntries={[ROUTE]} />
-    </VariablesProvider>
-  );
+describe('REST client', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+  it('renders page', async () => {
+    const TEST_ID = 'container';
 
-  expect(await screen.findByTestId(TEST_ID)).toBeInTheDocument();
+    const Stub = createRoutesStub(testRoutes);
+    renderWithProviders(<Stub initialEntries={[ROUTE]} />);
+
+    expect(await screen.findByTestId(TEST_ID)).toBeInTheDocument();
+  });
 });

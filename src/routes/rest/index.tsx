@@ -1,13 +1,12 @@
 import { useParams, useSearchParams, useFetcher } from 'react-router';
 import RESTClient from './rest-client';
-import { Alert, Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import { sendServerRequest } from '~/routes/rest/sendServerRequest';
 import type { Route as RouteType } from './+types';
 import getParams from '~/utils/getUrlParams';
 import { getUserFromRequest } from '~/utils/auth.server';
 import { redirect } from 'react-router';
-import { useIntlayer } from 'react-intlayer';
 import type { METHODS } from '~/constants';
 import { useCallback } from 'react';
 import type { Header } from '~/types';
@@ -40,7 +39,6 @@ export async function action({ request }: RouteType.ActionArgs) {
 }
 
 const RESTClientWrapper = () => {
-  const content = useIntlayer('rest');
   const fetcher = useFetcher();
   const response = fetcher.data;
 
@@ -67,39 +65,28 @@ const RESTClientWrapper = () => {
     [fetcher]
   );
 
-  try {
-    const { url, body, initialMethod, headers } = getParams({
-      method,
-      encodedBody,
-      encodedUrl,
-      searchParams,
-    });
+  const { url, body, initialMethod, headers } = getParams({
+    method,
+    encodedBody,
+    encodedUrl,
+    searchParams,
+  });
 
-    return (
-      <>
-        <Typography variant="h5" sx={{ mb: 3 }}>
-          REST
-        </Typography>
-        <RESTClient
-          initialMethod={initialMethod}
-          initialUrl={url}
-          initialBody={body}
-          initialHeaders={headers}
-          response={response}
-          asyncHandleSendRequest={asyncHandleSendRequest}
-        />
-      </>
-    );
-  } catch (error) {
-    return (
-      <Box p={3}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {content['error-header']}: {(error as Error).message}
-        </Alert>
-        <Typography variant="body2">{content['error-body']}</Typography>
-      </Box>
-    );
-  }
+  return (
+    <>
+      <Typography variant="h5" sx={{ mb: 3 }}>
+        REST
+      </Typography>
+      <RESTClient
+        initialMethod={initialMethod}
+        initialUrl={url}
+        initialBody={body}
+        initialHeaders={headers}
+        response={response}
+        asyncHandleSendRequest={asyncHandleSendRequest}
+      />
+    </>
+  );
 };
 
 export default RESTClientWrapper;
