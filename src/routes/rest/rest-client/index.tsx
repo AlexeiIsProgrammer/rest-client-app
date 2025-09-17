@@ -20,11 +20,12 @@ import GeneratedCode from '../generated-code';
 import ResponseSection from '../response-section';
 import { type Header, type RESTResponse } from '~/types';
 import { METHODS } from '~/constants';
-import { useNavigate } from 'react-router';
 import validateUrl from '~/utils/validateUrl';
 import { auth } from '~/firebase';
 import saveHistory from '~/utils/saveHistory';
 import toBase64 from '~/utils/toBase64';
+import { useIntlayer } from 'react-intlayer';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
 import { useVariablesContext } from '~/context/VariablesContext';
 import { substituteVariables } from '~/utils/variableStorage';
 
@@ -41,6 +42,8 @@ const RESTClient = ({
   response,
   asyncHandleSendRequest,
 }: RESTClientProps) => {
+  const content = useIntlayer('rest-client');
+
   const [method, setMethod] = useState<METHODS>(initialMethod);
   const [url, setUrl] = useState<string>(initialUrl);
   const [requestBody, setRequestBody] = useState<string>(initialBody);
@@ -48,7 +51,7 @@ const RESTClient = ({
   const [activeTab, setActiveTab] = useState(0);
   const [path, setPath] = useState<string>('');
 
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { variables } = useVariablesContext();
 
   const [error, setError] = useState('');
@@ -139,7 +142,7 @@ const RESTClient = ({
               disabled={!!error}
               size="large"
             >
-              Send
+              {content.send}
             </Button>
           </Grid>
         </Grid>

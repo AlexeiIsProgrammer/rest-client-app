@@ -3,12 +3,14 @@ import { JsonViewer } from '@textea/json-viewer';
 import type { RequestBodyEditorProps } from './types';
 import { METHODS } from '~/constants';
 import { useEffect, useState } from 'react';
+import { useIntlayer } from 'react-intlayer';
 
 const RequestBodyEditor = ({
   body,
   setBody,
   method,
 }: RequestBodyEditorProps) => {
+  const content = useIntlayer('request-body-editor');
   const hasBody = [METHODS.POST, METHODS.PUT, METHODS.PATCH].includes(method);
 
   const [parsedBody, setParsedBody] = useState<string>('');
@@ -39,9 +41,7 @@ const RequestBodyEditor = ({
   if (!hasBody) {
     return (
       <Box py={3}>
-        <Typography color="textSecondary">
-          This HTTP method typically doesn&apos;t include a request body.
-        </Typography>
+        <Typography color="textSecondary">{content['no-body']}</Typography>
       </Box>
     );
   }
@@ -56,7 +56,7 @@ const RequestBodyEditor = ({
         onClick={prettifyHandle}
         sx={{ mb: 2 }}
       >
-        Prettify
+        {content.prettify}
       </Button>
       <TextField
         error={error}
@@ -67,13 +67,13 @@ const RequestBodyEditor = ({
         value={body}
         onChange={(e) => setBody(e.target.value)}
         placeholder='{"key": "value"}'
-        label={error ? 'Invalid JSON' : 'Request Body'}
+        label={error ? content.invalid : content.body}
       />
 
       {body && (
         <Box mt={2}>
           <Typography variant="h6" gutterBottom>
-            Parsed View:
+            {content['parsed-view']}
           </Typography>
           <JsonViewer value={parsedBody} />
         </Box>

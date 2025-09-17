@@ -2,9 +2,12 @@ import React from 'react';
 import { TextField, InputAdornment, Chip } from '@mui/material';
 import Code from '@mui/icons-material/Code';
 import type { EndpointInputProps } from './types';
+import { useIntlayer } from 'react-intlayer';
 import { countVariables } from '~/utils/variableHighlight';
 
 const EndpointInput = ({ url, setUrl }: EndpointInputProps) => {
+  const content = useIntlayer('enpoint-input');
+
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
   };
@@ -15,7 +18,7 @@ const EndpointInput = ({ url, setUrl }: EndpointInputProps) => {
     <TextField
       fullWidth
       variant="outlined"
-      label="Endpoint URL"
+      label={content.label}
       placeholder="https://api.example.com/endpoint"
       value={url}
       onChange={handleUrlChange}

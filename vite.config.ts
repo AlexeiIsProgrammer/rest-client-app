@@ -1,9 +1,14 @@
 import { reactRouter } from '@react-router/dev/vite';
 import { defineConfig, type UserConfig } from 'vite';
+import { intlayerPlugin } from 'vite-intlayer';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [!process.env.VITEST && reactRouter(), tsconfigPaths()],
+  plugins: [
+    !process.env.VITEST && reactRouter(),
+    tsconfigPaths(),
+    intlayerPlugin(),
+  ],
   test: {
     environment: 'jsdom',
     globals: true,
@@ -12,6 +17,7 @@ export default defineConfig({
     coverage: {
       include: ['src/**/*.{js,jsx,ts,tsx}'],
       exclude: [
+        'src/**/*.content.{js,jsx,ts,tsx}',
         'src/**/*.test.{js,jsx,ts,tsx}',
         'src/**/*.spec.{js,jsx,ts,tsx}',
         'src/index.{js,jsx,ts,tsx}',

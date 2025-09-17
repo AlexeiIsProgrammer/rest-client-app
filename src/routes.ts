@@ -1,20 +1,15 @@
-import {
-  type RouteConfig,
-  index,
-  layout,
-  route,
-} from '@react-router/dev/routes';
+import { type RouteConfig, layout, route } from '@react-router/dev/routes';
 
 export default [
   layout('./layout.tsx', [
-    index('./routes/main/index.tsx'),
-    route('signup', 'routes/signup/index.tsx'),
-    route('signin', 'routes/signin/index.tsx'),
+    route('/:locale?', './routes/main/index.tsx'),
+    route('/:locale?/signup', 'routes/signup/index.tsx'),
+    route('/:locale?/signin', 'routes/signin/index.tsx'),
     route(
-      'rest/:method?/:encodedUrl?/:encodedBody?/:encodedVariables?',
+      '/:locale?/rest/:method?/:encodedUrl?/:encodedBody?/:encodedVariables?',
       './routes/rest/index.tsx'
     ),
-    route('variables', './routes/variables/Variables.lazy.tsx'),
-    route('history', './routes/history/index.tsx'),
+    route('/:locale?/variables', './routes/variables/Variables.lazy.tsx'),
+    route('/:locale?/history', './routes/history/index.tsx'),
   ]),
 ] satisfies RouteConfig;

@@ -5,26 +5,27 @@ import Spinner from '../../components/Spinner/Spinner';
 import AuthForm from '../../components/AuthForm/AuthForm';
 import { registerWithEmailAndPassword } from '../../firebase';
 import { validateEmail, validatePassword } from '../../utils/validation';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
+import { useIntlayer } from 'react-intlayer';
 
 export const loader = requireGuestLoader;
 
 export default function SignUp() {
+  const content = useIntlayer('sign-up');
+
   const [isFetching, setIsFetching] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateEmail(email)) {
-      return setError('Invalid email format');
+      return setError(content.email?.value);
     }
     if (!validatePassword(password)) {
-      return setError(
-        'Password must be at least 8 characters, include a letter, a number, and a special character'
-      );
+      return setError(content.password?.value);
     }
     try {
       setIsFetching(true);
@@ -36,7 +37,7 @@ export default function SignUp() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('An unexpected error occurred');
+        setError(content.error?.value);
       }
     } finally {
       setIsFetching(false);
@@ -48,7 +49,7 @@ export default function SignUp() {
       {isFetching && <Spinner />}
       <Container maxWidth="sm">
         <Typography variant="h4" gutterBottom>
-          Sign Up
+          {content['sign-up']}
         </Typography>
         <AuthForm
           email={email}
@@ -57,7 +58,7 @@ export default function SignUp() {
           setPassword={setPassword}
           handleSubmit={handleSubmit}
           error={error}
-          buttonText="Register"
+          buttonText={content.register?.value}
         />
       </Container>
     </>

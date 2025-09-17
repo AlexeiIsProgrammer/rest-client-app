@@ -11,3 +11,5 @@
 .vercel
 
 /coverage
+# Intlayer
+.intlayer
