@@ -85,7 +85,9 @@ const RESTClient = ({
       return;
     }
 
-    asyncHandleSendRequest({ method, url, body: requestBody, headers });
+    if (asyncHandleSendRequest)
+      asyncHandleSendRequest({ method, url, body: requestBody, headers });
+
     updateURL();
   };
 
@@ -119,7 +121,7 @@ const RESTClient = ({
   }, [response]);
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 3, pb: 10 }}>
+    <Container data-testid="container" maxWidth="lg" sx={{ mt: 3, pb: 10 }}>
       <StyledPaper>
         <Grid container spacing={2} alignItems="flex-start">
           <Grid>
