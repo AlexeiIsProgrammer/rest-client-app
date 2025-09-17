@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
 import Header from '../Header';
 import {
   describe,
@@ -15,9 +14,12 @@ vi.mock('@mui/material/useScrollTrigger', () => ({ default: () => false }));
 vi.mock('react-firebase-hooks/auth', () => ({ useAuthState: vi.fn() }));
 
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { createRoutesStub } from 'react-router';
 
-const renderWithRouter = (ui: React.ReactElement) =>
-  render(<MemoryRouter initialEntries={['/']}>{ui}</MemoryRouter>);
+const renderWithRouter = () => {
+  const Stub = createRoutesStub([{ path: '', Component: Header }]);
+  return render(<Stub initialEntries={['/']} />);
+};
 
 describe('Header', () => {
   beforeEach(() => {
@@ -31,7 +33,7 @@ describe('Header', () => {
       undefined,
     ]);
 
-    renderWithRouter(<Header />);
+    renderWithRouter();
 
     expect(
       screen.getByRole('link', { name: /go to home/i })
@@ -46,7 +48,7 @@ describe('Header', () => {
       undefined,
     ]);
 
-    renderWithRouter(<Header />);
+    renderWithRouter();
 
     expect(screen.getByRole('link', { name: /sign in/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /sign up/i })).toBeInTheDocument();
