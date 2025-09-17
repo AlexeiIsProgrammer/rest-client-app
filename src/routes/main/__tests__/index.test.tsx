@@ -1,14 +1,67 @@
-import { expect, test, vi } from 'vitest';
-// import Main from '..';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { Mock } from 'vitest';
 
-vi.mock('react-firebase-hooks/auth', () => ({
-  useAuthState: () => [{ email: 'test@example.com' }, false],
+import MainPage, { loader } from '../index';
+
+import * as authServer from '~/utils/auth.server';
+import { createRoutesStub } from 'react-router';
+
+vi.mock('~/utils/auth.server', () => ({
+  getUserFromRequest: vi.fn(),
 }));
 
-test.skip('Main renders', async () => {
-  render(<MemoryRouter>{/* <Main /> */}</MemoryRouter>);
+const testRoutes = [
+  {
+    path: '/',
+    Component: MainPage,
+    loader,
+  },
+];
 
-  expect(await screen.getByText(/welcome/i)).toBeInTheDocument();
+describe('MainPage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should render MainPage for unauthorized user', async () => {
+    (authServer.getUserFromRequest as Mock).mockResolvedValue(null);
+
+    const Stub = createRoutesStub(testRoutes);
+    render(<Stub initialEntries={['/']} />);
+
+    expect(
+      await screen.findByRole('heading', { name: /welcome!/i })
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole('link', { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /sign up/i })).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole('link', { name: /rest client/i })
+    ).not.toBeInTheDocument();
+  });
+
+  it('should render MainPage for authorized user', async () => {
+    const mockUser = { uid: 'user-123', email: 'test@example.com' };
+    (authServer.getUserFromRequest as Mock).mockResolvedValue(mockUser);
+
+    const Stub = createRoutesStub(testRoutes);
+    render(<Stub initialEntries={['/']} />);
+
+    expect(
+      await screen.findByRole('heading', {
+        name: /welcome, test@example.com!/i,
+      })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('link', { name: /rest client/i })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /history/i })).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole('link', { name: /sign in/i })
+    ).not.toBeInTheDocument();
+  });
 });

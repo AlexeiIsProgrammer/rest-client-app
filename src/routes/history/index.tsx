@@ -110,7 +110,7 @@ export default function History() {
                 >
                   {`${content.method?.value}: ${item.method.toUpperCase()} • ${content.status?.value}: ${item.statusCode ?? 'N/A'} • ${content.duration?.value}: ${
                     item.duration
-                  }${content.ms?.value} • ${content['request-size']?.value}: ${item.requestSize} ${content.bytes?.value}bytes • ${content['response-size']?.value}: ${
+                  }${content.ms?.value} • ${content['request-size']?.value}: ${item.requestSize} ${content.bytes?.value} • ${content['response-size']?.value}: ${
                     item.responseSize
                   } ${content.bytes?.value} • ${content.timestamp?.value}: ${transformServerTimestamp(item.timestamp.seconds)} ${item.error ? `• ${content.error?.value}: ${item.error}` : ''}`}
                 </Typography>
