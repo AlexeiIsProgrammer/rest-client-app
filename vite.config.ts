@@ -10,7 +10,7 @@ export default defineConfig({
     intlayerPlugin(),
   ],
   test: {
-    environment: 'jsdom',
+    environment: 'happy-dom',
     globals: true,
     provider: 'v8',
     setupFiles: './tests/setup.ts',

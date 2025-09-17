@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createRoutesStub } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 
@@ -54,10 +54,10 @@ describe('/signup', () => {
   describe('loaders logic', () => {
     it('renders SignUpPage for unauthorized user', async () => {
       (authServer.getUserFromRequest as Mock).mockResolvedValue(null);
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signup'],
-      });
-      render(<RouterProvider router={router} />);
+
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signup']} />);
+
       expect(
         await screen.findByRole('heading', { name: /sign up/i })
       ).toBeInTheDocument();
@@ -67,10 +67,10 @@ describe('/signup', () => {
       (authServer.getUserFromRequest as Mock).mockResolvedValue({
         uid: 'user-123',
       });
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signup'],
-      });
-      render(<RouterProvider router={router} />);
+
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signup']} />);
+
       expect(
         await screen.findByRole('heading', { name: /home page/i })
       ).toBeInTheDocument();
@@ -83,10 +83,8 @@ describe('/signup', () => {
       (authServer.getUserFromRequest as Mock).mockResolvedValue(null);
       (validationUtils.validateEmail as Mock).mockReturnValue(false);
 
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signup'],
-      });
-      render(<RouterProvider router={router} />);
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signup']} />);
 
       const emailInput = await screen.findByLabelText(/email/i);
       const passwordInput = await screen.findByLabelText(/password/i);
@@ -110,10 +108,9 @@ describe('/signup', () => {
       (validationUtils.validateEmail as Mock).mockReturnValue(true);
       (validationUtils.validatePassword as Mock).mockReturnValue(false);
 
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signup'],
-      });
-      render(<RouterProvider router={router} />);
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signup']} />);
+
       const emailInput = await screen.findByLabelText(/email/i);
       const passwordInput = await screen.findByLabelText(/password/i);
       const registerButton = await screen.findByRole('button', {
@@ -142,10 +139,8 @@ describe('/signup', () => {
         apiError
       );
 
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signup'],
-      });
-      render(<RouterProvider router={router} />);
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signup']} />);
 
       const emailInput = await screen.findByLabelText(/email/i);
       const passwordInput = await screen.findByLabelText(/password/i);
@@ -172,10 +167,8 @@ describe('/signup', () => {
         mockUser
       );
 
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signup'],
-      });
-      render(<RouterProvider router={router} />);
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signup']} />);
 
       const emailInput = await screen.findByLabelText(/email/i);
       const passwordInput = await screen.findByLabelText(/password/i);

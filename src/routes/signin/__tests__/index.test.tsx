@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createRoutesStub } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 
@@ -53,10 +53,10 @@ describe('/signin', () => {
   describe('loaders logic', () => {
     it('renders SignInPage for unauthorized user', async () => {
       (authServer.getUserFromRequest as Mock).mockResolvedValue(null);
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signin'],
-      });
-      render(<RouterProvider router={router} />);
+
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signin']} />);
+
       expect(
         await screen.findByRole('heading', { name: /sign in/i })
       ).toBeInTheDocument();
@@ -66,10 +66,10 @@ describe('/signin', () => {
       (authServer.getUserFromRequest as Mock).mockResolvedValue({
         uid: 'user-123',
       });
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signin'],
-      });
-      render(<RouterProvider router={router} />);
+
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signin']} />);
+
       expect(
         await screen.findByRole('heading', { name: /home page/i })
       ).toBeInTheDocument();
@@ -91,10 +91,8 @@ describe('/signin', () => {
         mockUserCredential
       );
 
-      const router = createMemoryRouter(testRoutes, {
-        initialEntries: ['/signin'],
-      });
-      render(<RouterProvider router={router} />);
+      const Stub = createRoutesStub(testRoutes);
+      render(<Stub initialEntries={['/signin']} />);
 
       const emailInput = await screen.findByLabelText(/email/i);
       const passwordInput = await screen.findByLabelText(/password/i);
