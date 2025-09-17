@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createRoutesStub } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 
@@ -9,6 +8,7 @@ import SignUpPage, { loader as requireGuestLoader } from '../index';
 import * as authServer from '~/utils/auth.server';
 import * as firebase from '~/firebase';
 import * as validationUtils from '~/utils/validation';
+import { createRoutesStub } from 'react-router';
 
 vi.mock('~/utils/auth.server', () => ({
   getUserFromRequest: vi.fn(),

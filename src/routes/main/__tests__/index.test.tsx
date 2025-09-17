@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import { createRoutesStub } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 
 import MainPage, { loader as mainLoader } from '../index';
 
 import * as authServer from '~/utils/auth.server';
+import { createRoutesStub } from 'react-router';
 
 vi.mock('~/utils/auth.server', () => ({
   getUserFromRequest: vi.fn(),
