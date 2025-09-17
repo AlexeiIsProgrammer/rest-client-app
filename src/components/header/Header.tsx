@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { logout, auth } from '../../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import React from 'react';
+import { logout } from '../../firebase';
+import { useRouteLoaderData } from 'react-router';
 import {
   AppBar,
   Toolbar,
@@ -19,11 +19,8 @@ import { useIntlayer } from 'react-intlayer';
 import LocalizedLink from '../LocalizedLink';
 
 function Header(): React.ReactElement {
-  const [user, setUser] = useState<{
-    uid: string;
-    email: string | null;
-  } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const data = useRouteLoaderData('layout');
+  const user = data?.user ?? null;
   const content = useIntlayer('header');
 
   const navigate = useLocalizedNavigate();
@@ -31,15 +28,6 @@ function Header(): React.ReactElement {
     disableHysteresis: true,
     threshold: 10,
   });
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   function handleLogout() {
     logout();
@@ -83,7 +71,7 @@ function Header(): React.ReactElement {
         </Box>
 
         <Box sx={{ '& > *': { m: 1 } }}>
-          {!loading && user && user.email ? (
+          {user && user.email ? (
             <Button
               startIcon={<Logout />}
               variant="outlined"

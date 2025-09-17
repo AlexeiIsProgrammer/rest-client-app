@@ -13,6 +13,8 @@ function Footer(): React.ReactElement {
         backgroundColor: '#E0E2E6',
         boxShadow: 'none',
         transition: 'all 0.3s ease-in-out',
+        margin: '0 8px',
+        width: 'calc(100% - 16px)',
       }}
     >
       <Toolbar
@@ -20,8 +22,9 @@ function Footer(): React.ReactElement {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 3,
+          gap: 2,
           minHeight: 56,
+          paddingX: 2,
         }}
       >
         <IconButton
