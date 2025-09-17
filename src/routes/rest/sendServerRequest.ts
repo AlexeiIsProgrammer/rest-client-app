@@ -1,7 +1,5 @@
 import { METHODS } from '~/constants';
 import type { Header } from '~/types';
-import { substituteVariables } from '~/utils/variableStorage';
-import type { Variable } from '~/routes/variables/types';
 
 const getHttpErrorMessage = (status: number, statusText: string): string => {
   switch (status) {
@@ -36,22 +34,18 @@ export const sendServerRequest = async (
   method: METHODS,
   url: string,
   body: string | unknown,
-  headers: Header[],
-  variables: Variable[] = []
+  headers: Header[]
 ) => {
   try {
-    const processedUrl = substituteVariables(url, variables);
+    const processedUrl = url;
 
     let bodyString = body;
     if (typeof body === 'object' && body !== null) {
       bodyString = JSON.stringify(body);
     }
-    const processedBody = substituteVariables(bodyString, variables);
+    const processedBody = bodyString;
 
-    const processedHeaders = headers.map((header) => ({
-      name: substituteVariables(header.name, variables),
-      value: substituteVariables(header.value, variables),
-    }));
+    const processedHeaders = headers;
 
     const options: RequestInit = {
       method,
@@ -59,7 +53,7 @@ export const sendServerRequest = async (
         'Content-Type': 'application/json',
         ...processedHeaders.reduce(
           (acc, curr) => ({ ...acc, [curr.name]: curr.value }),
-          {}
+          {} as Record<string, string>
         ),
       },
     };
@@ -71,9 +65,9 @@ export const sendServerRequest = async (
       )
     ) {
       try {
-        options.body = JSON.stringify(JSON.parse(processedBody));
+        options.body = JSON.stringify(JSON.parse(String(processedBody)));
       } catch {
-        options.body = processedBody;
+        options.body = String(processedBody);
         if (options.headers) {
           (options.headers as Record<string, string>)['Content-Type'] =
             'text/plain';
@@ -81,18 +75,10 @@ export const sendServerRequest = async (
       }
     }
 
-    if (/\{\{([^}]+)\}\}/.test(processedUrl)) {
-      throw new Error(
-        `Failed to substitute all variables in URL: ${processedUrl}`
-      );
-    }
-
     try {
       new URL(processedUrl);
     } catch {
-      throw new Error(
-        `Invalid URL after variable substitution: ${processedUrl}`
-      );
+      throw new Error(`Invalid URL: ${processedUrl}`);
     }
 
     const startTime = Date.now();
