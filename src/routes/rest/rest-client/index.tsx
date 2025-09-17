@@ -85,7 +85,20 @@ const RESTClient = ({
       return;
     }
 
-    asyncHandleSendRequest({ method, url, body: requestBody, headers });
+    const substitutedUrl = substituteVariables(url, variables);
+    const substitutedBody = substituteVariables(requestBody, variables);
+    const substitutedHeaders = headers.map((header) => ({
+      ...header,
+      name: substituteVariables(header.name, variables),
+      value: substituteVariables(header.value, variables),
+    }));
+
+    asyncHandleSendRequest({
+      method,
+      url: substitutedUrl,
+      body: substitutedBody,
+      headers: substitutedHeaders,
+    });
     updateURL();
   };
 
@@ -116,7 +129,7 @@ const RESTClient = ({
     if (user && response) {
       saveResponseHistory(response, user);
     }
-  }, [response]);
+  }, [response, saveResponseHistory]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 3, pb: 10 }}>

@@ -1,8 +1,8 @@
 import { type RouteConfig, layout, route } from '@react-router/dev/routes';
 
 export default [
-  layout('./layout.tsx', [
-    route('/:locale?', './routes/main/index.tsx'),
+  layout('./layout.tsx', { id: 'layout' }, [
+    route('/:locale?', './routes/main/index.tsx', { id: 'main' }),
     route('/:locale?/signup', 'routes/signup/index.tsx'),
     route('/:locale?/signin', 'routes/signin/index.tsx'),
     route(

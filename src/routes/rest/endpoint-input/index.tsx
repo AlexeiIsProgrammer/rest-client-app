@@ -25,7 +25,7 @@ const EndpointInput = ({ url, setUrl }: EndpointInputProps) => {
       slotProps={{
         input: {
           endAdornment: variableCount > 0 && (
-            <InputAdornment position="end">
+            <InputAdornment position="end" sx={{ marginRight: 1 }}>
               <Chip
                 icon={<Code />}
                 label={`${variableCount} variable${variableCount > 1 ? 's' : ''}`}
