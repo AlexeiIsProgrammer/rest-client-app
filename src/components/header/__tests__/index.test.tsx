@@ -28,7 +28,15 @@ vi.mock('~/components/LanguageSwitcher', () => ({
 }));
 
 vi.mock('~/components/LocalizedLink', () => ({
-  default: ({ children, to, ...props }: { children: React.ReactNode; to: string; [key: string]: unknown }) => (
+  default: ({
+    children,
+    to,
+    ...props
+  }: {
+    children: React.ReactNode;
+    to: string;
+    [key: string]: unknown;
+  }) => (
     <a href={to} {...props}>
       {children}
     </a>
