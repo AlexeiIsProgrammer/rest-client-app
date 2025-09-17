@@ -36,16 +36,16 @@ const pageContent = {
       ru: 'Размер ответа',
     }),
     timestamp: t({
-      en: 'Request History',
-      ru: 'История запросов',
-    }),
-    error: t({
       en: 'Timestamp',
       ru: 'Отметка времени',
     }),
-    method: t({
+    error: t({
       en: 'Error',
       ru: 'Ошибка',
+    }),
+    method: t({
+      en: 'Method',
+      ru: 'Метод',
     }),
   },
 } satisfies Dictionary;
