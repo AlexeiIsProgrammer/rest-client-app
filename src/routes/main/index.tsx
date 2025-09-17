@@ -1,16 +1,14 @@
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router';
 import { getUserFromRequest } from '../../utils/auth.server';
 import MainNonAuthorized from '../../components/Main/MainNonAuthorized';
 import MainAuthorized from '../../components/Main/MainAuthorized';
 
-/* c8 ignore start */
 export function meta() {
   return [
     { title: 'Main page' },
     { name: 'description', content: 'Welcome to Main page!' },
   ];
 }
-/* c8 ignore stop */
 
 export async function loader({ request }: { request: Request }) {
   const user = await getUserFromRequest(request);

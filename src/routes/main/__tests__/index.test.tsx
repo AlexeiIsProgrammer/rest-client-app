@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 
-import MainPage, { loader as mainLoader } from '../index';
+import MainPage, { loader } from '../index';
 
 import * as authServer from '~/utils/auth.server';
 import { createRoutesStub } from 'react-router';
@@ -15,7 +15,7 @@ const testRoutes = [
   {
     path: '/',
     Component: MainPage,
-    loader: mainLoader,
+    loader,
   },
 ];
 
@@ -42,7 +42,7 @@ describe('MainPage', () => {
     ).not.toBeInTheDocument();
   });
 
-  it.skip('should render MainPage for authorized user', async () => {
+  it('should render MainPage for authorized user', async () => {
     const mockUser = { uid: 'user-123', email: 'test@example.com' };
     (authServer.getUserFromRequest as Mock).mockResolvedValue(mockUser);
 
