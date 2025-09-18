@@ -33,8 +33,9 @@ const GeneratedCode = ({ method, url, body, headers }: GeneratedCodeProps) => {
   return (
     <Box py={3}>
       <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>{content.language}Language</InputLabel>
+        <InputLabel>{content.language}</InputLabel>
         <Select
+          data-testid="select"
           value={language}
           label={content.language}
           onChange={(e) => setLanguage(e.target.value)}

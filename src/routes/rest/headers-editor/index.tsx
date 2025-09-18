@@ -77,7 +77,7 @@ const HeadersEditor = ({ headers, setHeaders }: HeadersEditorProps) => {
             />
           </Grid>
           <Grid>
-            <IconButton onClick={() => removeHeader(index)}>
+            <IconButton title="Delete" onClick={() => removeHeader(index)}>
               <Delete />
             </IconButton>
           </Grid>

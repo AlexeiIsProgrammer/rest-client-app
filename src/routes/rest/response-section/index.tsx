@@ -71,6 +71,7 @@ const ResponseSection = ({ response }: ResponseSectionProps) => {
           <Box>
             {response.data ? (
               <SyntaxHighlighter
+                data-testid="syntax-highlighter"
                 language="json"
                 style={atomDark}
                 showLineNumbers

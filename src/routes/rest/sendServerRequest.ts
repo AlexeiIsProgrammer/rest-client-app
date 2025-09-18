@@ -91,7 +91,7 @@ export const sendServerRequest = async (
     if (contentType && contentType.includes('application/json')) {
       responseData = await res.json();
     } else {
-      responseData = await res.text();
+      responseData = await res?.text?.();
     }
 
     if (!res.ok) {

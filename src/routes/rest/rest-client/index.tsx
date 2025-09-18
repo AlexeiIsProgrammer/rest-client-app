@@ -93,12 +93,14 @@ const RESTClient = ({
       value: substituteVariables(header.value, variables),
     }));
 
-    asyncHandleSendRequest({
-      method,
-      url: substitutedUrl,
-      body: substitutedBody,
-      headers: substitutedHeaders,
-    });
+    if (asyncHandleSendRequest)
+      asyncHandleSendRequest({
+        method,
+        url: substitutedUrl,
+        body: substitutedBody,
+        headers: substitutedHeaders,
+      });
+
     updateURL();
   };
 
@@ -132,7 +134,7 @@ const RESTClient = ({
   }, [response, saveResponseHistory]);
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 3, pb: 10 }}>
+    <Container data-testid="container" maxWidth="lg" sx={{ mt: 3, pb: 10 }}>
       <StyledPaper>
         <Grid container spacing={2} alignItems="flex-start">
           <Grid>
