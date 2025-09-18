@@ -49,59 +49,67 @@ describe('useVariables', () => {
 
   it('should return variables after adding a new variable', async () => {
     const { result } = renderHook(() => useVariables('test-user'));
-    
+
     act(() => {
       result.current.addVariable('test-variable', 'test-value');
     });
-    
+
     await waitFor(() => {
-      expect(result.current.variables).toEqual([{ id: expect.any(String), name: 'test-variable', value: 'test-value' }]);
+      expect(result.current.variables).toEqual([
+        { id: expect.any(String), name: 'test-variable', value: 'test-value' },
+      ]);
     });
   });
 
   it('should return variables after updating a variable', async () => {
     const { result } = renderHook(() => useVariables('test-user'));
-    
+
     let addedVariable: { id: string; name: string; value: string };
-    
+
     act(() => {
       addedVariable = result.current.addVariable('test-variable', 'test-value');
     });
-    
+
     await waitFor(() => {
       expect(result.current.variables).toHaveLength(1);
     });
-    
+
     act(() => {
-      result.current.updateVariable(addedVariable.id, 'updated-variable', 'updated-value');
+      result.current.updateVariable(
+        addedVariable.id,
+        'updated-variable',
+        'updated-value'
+      );
     });
-    
+
     await waitFor(() => {
-      expect(result.current.variables).toEqual([{ 
-        id: addedVariable.id, 
-        name: 'updated-variable', 
-        value: 'updated-value' 
-      }]);
+      expect(result.current.variables).toEqual([
+        {
+          id: addedVariable.id,
+          name: 'updated-variable',
+          value: 'updated-value',
+        },
+      ]);
     });
   });
 
   it('should return variables after deleting a variable', async () => {
     const { result } = renderHook(() => useVariables('test-user'));
-    
+
     let addedVariable: { id: string; name: string; value: string };
-    
+
     act(() => {
       addedVariable = result.current.addVariable('test-variable', 'test-value');
     });
-    
+
     await waitFor(() => {
       expect(result.current.variables).toHaveLength(1);
     });
-    
+
     act(() => {
       result.current.deleteVariable(addedVariable.id);
     });
-    
+
     await waitFor(() => {
       expect(result.current.variables).toEqual([]);
     });
@@ -109,19 +117,19 @@ describe('useVariables', () => {
 
   it('should return variables after clearing all variables', async () => {
     const { result } = renderHook(() => useVariables('test-user'));
-    
+
     act(() => {
       result.current.addVariable('test-variable', 'test-value');
     });
-    
+
     await waitFor(() => {
       expect(result.current.variables).toHaveLength(1);
     });
-    
+
     act(() => {
       result.current.clearAllVariables();
     });
-    
+
     await waitFor(() => {
       expect(result.current.variables).toEqual([]);
     });
@@ -129,11 +137,11 @@ describe('useVariables', () => {
 
   it('should return variables after loading variables', async () => {
     const { result } = renderHook(() => useVariables('test-user'));
-    
+
     act(() => {
       result.current.loadVariables();
     });
-    
+
     await waitFor(() => {
       expect(result.current.variables).toEqual([]);
     });
@@ -141,19 +149,19 @@ describe('useVariables', () => {
 
   it('should return variable by name', async () => {
     const { result } = renderHook(() => useVariables('test-user'));
-    
+
     let addedVariable: { id: string; name: string; value: string } | undefined;
-    
+
     act(() => {
       addedVariable = result.current.addVariable('test-variable', 'test-value');
     });
-    
+
     await waitFor(() => {
       expect(result.current.variables).toHaveLength(1);
     });
-    
+
     const foundVariable = result.current.getVariableByName('test-variable');
-    
+
     expect(foundVariable).toEqual(addedVariable);
   });
 });
