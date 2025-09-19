@@ -91,22 +91,5 @@ describe('Authentication Loaders', () => {
       expect(redirect).not.toHaveBeenCalled();
       expect(result).toEqual(mockUser);
     });
-
-    it.skip('should handle errors from getUserFromRequest gracefully', async () => {
-      (getUserFromRequest as Mock).mockRejectedValue(new Error('Auth error'));
-      (redirect as Mock).mockReturnValue(
-        new Response(null, { status: 302, headers: { Location: '/signin' } })
-      );
-      let result;
-      try {
-        result = await requireAuthLoader({ request: mockRequest });
-      } catch {
-        expect(getUserFromRequest).toHaveBeenCalledWith(mockRequest);
-        expect(redirect).toHaveBeenCalledWith('/signin');
-        expect(result).toBeInstanceOf(Response);
-        expect(result?.status).toBe(302);
-        expect(result?.headers.get('Location')).toBe('/signin');
-      }
-    });
   });
 });

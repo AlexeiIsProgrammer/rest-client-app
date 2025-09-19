@@ -249,26 +249,4 @@ describe('saveHistory', () => {
       encodedPath: '/api/test',
     });
   });
-
-  it.skip('should handle addDoc errors gracefully', async () => {
-    const error = new Error('Firestore error');
-    vi.mocked(addDoc).mockRejectedValueOnce(error);
-
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    await expect(
-      saveHistory({
-        user: mockUser,
-        url: 'https://api.example.com/test',
-        method: 'GET',
-        response: mockResponse,
-        requestBody: '',
-        path: '/api/test',
-      })
-    ).rejects.toThrow('Firestore error');
-
-    expect(consoleSpy).toHaveBeenCalledWith('Error saving history:', error);
-
-    consoleSpy.mockRestore();
-  });
 });
