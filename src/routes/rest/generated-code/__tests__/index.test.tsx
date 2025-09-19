@@ -1,7 +1,7 @@
 import { expect, vi, describe, it, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import GeneratedCode from '..';
-import { LANGUAGE_OPTIONS, LANGUAGES, METHODS } from '~/constants';
+import { LANGUAGES, METHODS } from '~/constants';
 import type { GeneratedCodeProps } from '../types';
 import { generateCode } from '~/utils/codeGenerators';
 
@@ -25,37 +25,6 @@ describe('GeneratedCode', async () => {
     render(<GeneratedCode {...mockProps} />);
 
     expect(screen.getByDisplayValue(LANGUAGES.curl)).toBeInTheDocument();
-  });
-
-  it.skip('displays all language options in the dropdown', () => {
-    render(<GeneratedCode {...mockProps} />);
-
-    const select = screen.getByTestId('select');
-    fireEvent.mouseDown(select);
-
-    LANGUAGE_OPTIONS.forEach((option) => {
-      expect(screen.getByRole('li', { name: option })).toBeInTheDocument();
-    });
-  });
-
-  it.skip('updates code when language is changed', async () => {
-    render(<GeneratedCode {...mockProps} />);
-
-    const select = screen.getByTestId('select');
-    fireEvent.mouseDown(select);
-
-    const javascriptOption = screen.getByRole('li', {
-      name: LANGUAGES['javascript-fetch'],
-    });
-    fireEvent.click(javascriptOption);
-
-    expect(generateCode).toHaveBeenCalledWith(
-      mockProps.method,
-      mockProps.url,
-      mockProps.body,
-      mockProps.headers,
-      LANGUAGES['javascript-fetch']
-    );
   });
 
   it('shows fallback content when no code is generated', async () => {

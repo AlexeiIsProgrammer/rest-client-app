@@ -1,6 +1,5 @@
 import { useParams, useSearchParams, useFetcher } from 'react-router';
 import RESTClient from './rest-client';
-import { Typography } from '@mui/material';
 
 import { sendServerRequest } from '~/routes/rest/sendServerRequest';
 import type { Route as RouteType } from './+types';
@@ -73,19 +72,14 @@ const RESTClientWrapper = () => {
   });
 
   return (
-    <>
-      <Typography variant="h5" sx={{ mb: 3 }}>
-        REST
-      </Typography>
-      <RESTClient
-        initialMethod={initialMethod}
-        initialUrl={url}
-        initialBody={body}
-        initialHeaders={headers}
-        response={response}
-        asyncHandleSendRequest={asyncHandleSendRequest}
-      />
-    </>
+    <RESTClient
+      initialMethod={initialMethod}
+      initialUrl={url}
+      initialBody={body}
+      initialHeaders={headers}
+      response={response}
+      asyncHandleSendRequest={asyncHandleSendRequest}
+    />
   );
 };
 
