@@ -2,6 +2,7 @@ import { useLoaderData } from 'react-router';
 import { getUserFromRequest } from '../../utils/auth.server';
 import MainNonAuthorized from '../../components/Main/MainNonAuthorized';
 import MainAuthorized from '../../components/Main/MainAuthorized';
+import MainCourceInfo from '../../components/Main/MainCourceInfo';
 
 /* v8 ignore start -- @preserve */
 export function meta() {
@@ -22,9 +23,14 @@ export async function loader({ request }: { request: Request }) {
 export default function Main() {
   const { user } = useLoaderData();
 
-  if (user && user.email) {
-    return <MainAuthorized email={user.email} />;
-  } else {
-    return <MainNonAuthorized />;
-  }
+  return (
+    <div>
+      {user && user.email ? (
+        <MainAuthorized email={user.email} />
+      ) : (
+        <MainNonAuthorized />
+      )}
+      <MainCourceInfo />
+    </div>
+  );
 }
