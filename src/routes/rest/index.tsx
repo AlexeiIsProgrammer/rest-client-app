@@ -20,7 +20,7 @@ export function meta() {
 export async function loader({ request }: RouteType.LoaderArgs) {
   const user = await getUserFromRequest(request);
   if (!user) {
-    return redirect('/signin');
+    return redirect('/');
   }
 }
 

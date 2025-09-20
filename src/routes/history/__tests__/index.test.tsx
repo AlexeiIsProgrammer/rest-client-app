@@ -35,7 +35,7 @@ const testRoutes = [
     loader: historyLoader,
   },
   {
-    path: '/signin',
+    path: '/',
     Component: SignInPage,
   },
 ];
@@ -45,7 +45,7 @@ describe('/history', () => {
     vi.clearAllMocks();
   });
 
-  it('redirects to /signin if user not authenticated', async () => {
+  it('redirects to / if user not authenticated', async () => {
     (authServer.getUserFromRequest as Mock).mockResolvedValue(null);
 
     const Stub = createRoutesStub(testRoutes);

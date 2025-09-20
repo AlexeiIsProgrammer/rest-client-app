@@ -39,7 +39,7 @@ export function meta() {
 export const loader = async ({ request }: { request: Request }) => {
   const user = await getUserFromRequest(request);
   if (!user) {
-    return redirect('/signin');
+    return redirect('/');
   }
   const q = query(
     collection(db, 'requests'),

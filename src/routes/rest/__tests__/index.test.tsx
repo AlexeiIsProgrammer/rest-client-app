@@ -26,7 +26,7 @@ const testRoutes = [
     action,
   },
   {
-    path: '/signin',
+    path: '/',
     Component: SignInPage,
   },
 ];
@@ -77,7 +77,7 @@ describe('RESTClientWrapper', () => {
 
     expect(response).toBeInstanceOf(Response);
     expect(response?.status).toBe(302);
-    expect(response?.headers.get('Location')).toBe('/signin');
+    expect(response?.headers.get('Location')).toBe('/');
   });
 
   it('action function processes form data correctly', async () => {
