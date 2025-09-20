@@ -104,8 +104,8 @@ const pageContent = {
       ru: 'Разработчик',
     }),
     developerBio: t({
-      en: 'React developer working on the REST client application for the RS School React course final project.',
-      ru: 'React разработчик, работающий над REST клиент приложением для финального проекта курса React от RS School.',
+      en: 'React developer working on the application for the RS School React course final project.',
+      ru: 'React разработчик, работающий над приложением для финального проекта курса React от RS School.',
     }),
     linkedin: t({
       en: 'LinkedIn',
@@ -117,7 +117,7 @@ const pageContent = {
     }),
     alex: t({
       en: 'Alexei Shmulevtsov',
-      ru: 'Алексей Шмульцев',
+      ru: 'Алексей Шмулевцов',
     }),
     andrew: t({
       en: 'Andrei Paleshchuk',
