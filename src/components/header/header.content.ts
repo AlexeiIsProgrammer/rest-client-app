@@ -12,6 +12,10 @@ const pageContent = {
       ru: 'Зарегистрироваться',
     }),
     logout: t({
+      en: 'Logout',
+      ru: 'Выйти',
+    }),
+    main: t({
       en: 'Main',
       ru: 'Главная',
     }),
