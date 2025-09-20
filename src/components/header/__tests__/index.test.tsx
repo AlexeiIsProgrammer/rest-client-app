@@ -14,6 +14,7 @@ vi.mock('react-intlayer', () => ({
     home: { value: 'Home' },
     logo: { value: 'Logo' },
     logout: 'Logout',
+    main: 'Main',
     'sign-in': 'Sign In',
     'sign-up': 'Sign Up',
   })),
@@ -143,6 +144,19 @@ describe('Header', () => {
     fireEvent.click(logoutButton);
 
     expect(firebase.logout).toHaveBeenCalledTimes(1);
+  });
+
+  it('should redirect main when main button is clicked', async () => {
+    const { useRouteLoaderData } = await import('react-router');
+    vi.mocked(useRouteLoaderData).mockReturnValue({
+      user: { email: 'test@example.com', uid: 'user-123' },
+    });
+
+    const Stub = createRoutesStub(testRoutes);
+    render(<Stub initialEntries={['/']} />);
+
+    const mainButton = screen.getByText('Main');
+    fireEvent.click(mainButton);
   });
 
   it('should have correct navigation links', async () => {

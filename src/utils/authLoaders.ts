@@ -11,7 +11,7 @@ export async function requireGuestLoader({ request }: { request: Request }) {
 export async function requireAuthLoader({ request }: { request: Request }) {
   const user = await getUserFromRequest(request);
   if (!user) {
-    return redirect('/signin');
+    return redirect('/');
   }
   return user;
 }

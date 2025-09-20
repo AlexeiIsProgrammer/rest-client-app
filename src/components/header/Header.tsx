@@ -29,6 +29,10 @@ function Header(): React.ReactElement {
     threshold: 10,
   });
 
+  function handleMain() {
+    navigate('/');
+  }
+
   function handleLogout() {
     logout();
     navigate('/');
@@ -72,16 +76,19 @@ function Header(): React.ReactElement {
 
         <Box sx={{ '& > *': { m: 1 } }}>
           {user && user.email ? (
-            <Button
-              startIcon={<Logout />}
-              variant="outlined"
-              size="medium"
-              onClick={() => {
-                handleLogout();
-              }}
-            >
-              {content.logout}
-            </Button>
+            <>
+              <Button variant="outlined" size="medium" onClick={handleMain}>
+                {content.main}
+              </Button>
+              <Button
+                startIcon={<Logout />}
+                variant="outlined"
+                size="medium"
+                onClick={handleLogout}
+              >
+                {content.logout}
+              </Button>
+            </>
           ) : (
             <>
               <Button

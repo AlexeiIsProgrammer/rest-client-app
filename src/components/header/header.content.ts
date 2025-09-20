@@ -15,6 +15,10 @@ const pageContent = {
       en: 'Logout',
       ru: 'Выйти',
     }),
+    main: t({
+      en: 'Main',
+      ru: 'Главная',
+    }),
     home: t({
       en: 'Go to home',
       ru: 'На главную',
