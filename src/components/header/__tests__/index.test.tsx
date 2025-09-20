@@ -3,8 +3,6 @@ import Header from '../Header';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createRoutesStub } from 'react-router';
 
-import * as firebase from '~/firebase';
-
 vi.mock('@mui/material/useScrollTrigger', () => ({
   default: vi.fn(() => false),
 }));
@@ -13,7 +11,7 @@ vi.mock('react-intlayer', () => ({
   useIntlayer: vi.fn(() => ({
     home: { value: 'Home' },
     logo: { value: 'Logo' },
-    logout: 'Logout',
+    logout: 'Main',
     'sign-in': 'Sign In',
     'sign-up': 'Sign Up',
   })),
@@ -55,10 +53,6 @@ vi.mock('~/utils/auth.server', () => ({
   getUserFromRequest: vi.fn(),
 }));
 
-vi.mock('~/firebase', () => ({
-  logout: vi.fn(),
-}));
-
 vi.mock('~/utils/validation', () => ({
   validateEmail: vi.fn(),
 }));
@@ -86,10 +80,10 @@ describe('Header', () => {
     expect(screen.getByTestId('language-switcher')).toBeInTheDocument();
     expect(screen.getByText('Sign In')).toBeInTheDocument();
     expect(screen.getByText('Sign Up')).toBeInTheDocument();
-    expect(screen.queryByText('Logout')).not.toBeInTheDocument();
+    expect(screen.queryByText('Main')).not.toBeInTheDocument();
   });
 
-  it('should render logout button for authenticated user', async () => {
+  it('should render main button for authenticated user', async () => {
     const { useRouteLoaderData } = await import('react-router');
     vi.mocked(useRouteLoaderData).mockReturnValue({
       user: { email: 'test@example.com', uid: 'user-123' },
@@ -98,7 +92,7 @@ describe('Header', () => {
     const Stub = createRoutesStub(testRoutes);
     render(<Stub initialEntries={['/']} />);
 
-    expect(screen.getByText('Logout')).toBeInTheDocument();
+    expect(screen.getByText('Main')).toBeInTheDocument();
     expect(screen.queryByText('Sign In')).not.toBeInTheDocument();
     expect(screen.queryByText('Sign Up')).not.toBeInTheDocument();
   });
@@ -114,7 +108,7 @@ describe('Header', () => {
 
     expect(screen.getByText('Sign In')).toBeInTheDocument();
     expect(screen.getByText('Sign Up')).toBeInTheDocument();
-    expect(screen.queryByText('Logout')).not.toBeInTheDocument();
+    expect(screen.queryByText('Main')).not.toBeInTheDocument();
   });
 
   it('should render when scrolled', async () => {
@@ -130,7 +124,7 @@ describe('Header', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument();
   });
 
-  it('should call logout when logout button is clicked', async () => {
+  it('should call main when main button is clicked', async () => {
     const { useRouteLoaderData } = await import('react-router');
     vi.mocked(useRouteLoaderData).mockReturnValue({
       user: { email: 'test@example.com', uid: 'user-123' },
@@ -139,10 +133,8 @@ describe('Header', () => {
     const Stub = createRoutesStub(testRoutes);
     render(<Stub initialEntries={['/']} />);
 
-    const logoutButton = screen.getByText('Logout');
+    const logoutButton = screen.getByText('Main');
     fireEvent.click(logoutButton);
-
-    expect(firebase.logout).toHaveBeenCalledTimes(1);
   });
 
   it('should have correct navigation links', async () => {

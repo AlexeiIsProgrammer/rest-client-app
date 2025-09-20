@@ -67,19 +67,19 @@ describe('Authentication Loaders', () => {
   });
 
   describe('requireAuthLoader', () => {
-    it('should redirect to signin if user is not authenticated', async () => {
+    it('should redirect to main if user is not authenticated', async () => {
       (getUserFromRequest as Mock).mockResolvedValue(null);
       (redirect as Mock).mockReturnValue(
-        new Response(null, { status: 302, headers: { Location: '/signin' } })
+        new Response(null, { status: 302, headers: { Location: '/' } })
       );
 
       const result = await requireAuthLoader({ request: mockRequest });
 
       expect(getUserFromRequest).toHaveBeenCalledWith(mockRequest);
-      expect(redirect).toHaveBeenCalledWith('/signin');
+      expect(redirect).toHaveBeenCalledWith('/');
       expect(result).toBeInstanceOf(Response);
       expect(result.status).toBe(302);
-      expect(result.headers.get('Location')).toBe('/signin');
+      expect(result.headers.get('Location')).toBe('/');
     });
 
     it('should return user if user is authenticated', async () => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { logout } from '../../firebase';
 import { useRouteLoaderData } from 'react-router';
 import {
   AppBar,
@@ -10,7 +9,6 @@ import {
   useScrollTrigger,
 } from '@mui/material';
 import Login from '@mui/icons-material/Login';
-import Logout from '@mui/icons-material/Logout';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import students from '../../assets/images/mentor-with-his-students.svg';
 import { useLocalizedNavigate } from '~/hooks/useLocalizedNavigate';
@@ -30,7 +28,6 @@ function Header(): React.ReactElement {
   });
 
   function handleLogout() {
-    logout();
     navigate('/');
   }
 
@@ -73,7 +70,6 @@ function Header(): React.ReactElement {
         <Box sx={{ '& > *': { m: 1 } }}>
           {user && user.email ? (
             <Button
-              startIcon={<Logout />}
               variant="outlined"
               size="medium"
               onClick={() => {
